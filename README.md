@@ -218,7 +218,7 @@ Every `fit_margin ≥ 0` is a rigorous interval-arithmetic certificate that the 
 ## Citing
 
 If you use this code, please cite the paper. This repository is archived at Zenodo:
-[https://doi.org/10.5281/zenodo.21283481](https://doi.org/10.5281/zenodo.21283481) (DOI `10.5281/zenodo.21283481`).
+[https://doi.org/10.5281/zenodo.21283481](https://doi.org/10.5281/zenodo.21283480) (DOI `10.5281/zenodo.21283480`).
 
 The certificate `head_certificate_sqrt2.json` and the finite-window evaluations are the archival record
 behind the computer-assisted Theorem 5.7.
