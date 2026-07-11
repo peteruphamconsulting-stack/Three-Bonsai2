@@ -72,9 +72,14 @@ def fig_staircase(path="staircase_angle.png", N=48):
         if j % 2 == 1: w *= (1.0 - 1.0 / p)
         else:          h *= (1.0 - 1.0 / p)
         xs.append(1.0 - w); ys.append(1.0 - h); ratios.append(h / w)
-    # the constant L (alternating prime sum) converges slowly: use many primes for its value
-    Pbig = sieve(2 * 10**7)
-    L = float(np.sum(((-1.0)**np.arange(1, len(Pbig) + 1)) * np.log(1.0 - 1.0 / Pbig)))
+    # the constant L (alternating prime sum) converges slowly; midpoint (Euler) acceleration of
+    # the partial sums exposes the displayed digits (see staircase_constant.py for the full
+    # decade-by-decade reproduction and the rigorous Leibniz bound). Raw sum to 2e7 alone gives
+    # only ~8 places; the midpoint of the last two partial sums matches the paper's 0.4047892180.
+    Pbig = sieve(2 * 10**7).astype(np.float64)
+    signs = (-1.0) ** (np.arange(1, len(Pbig) + 1) + 1)
+    Lpart = np.cumsum(signs * (-np.log1p(-1.0 / Pbig)))
+    L = float(0.5 * (Lpart[-1] + Lpart[-2]))         # one Euler step
     kappa = exp(L); theta = degrees(atan2(kappa, 1.0))
 
     fig, ax = plt.subplots(1, 2, figsize=(11, 5))

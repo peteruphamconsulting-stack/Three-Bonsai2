@@ -1,0 +1,467 @@
+[
+ {
+  "p": 2,
+  "anchor": 1,
+  "rotation": 0,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 1,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 2,
+    "dir_index": 6,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Add(Integer(-1), Pow(Integer(2), Rational(1, 2)))",
+    "Integer(0)"
+   ],
+   [
+    "Pow(Integer(2), Rational(1, 2))",
+    "Integer(0)"
+   ],
+   [
+    "Add(Integer(-1), Pow(Integer(2), Rational(1, 2)))",
+    "Integer(1)"
+   ]
+  ]
+ },
+ {
+  "p": 3,
+  "anchor": 2,
+  "rotation": 3,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 4,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 1,
+    "dir_index": 2,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Mul(Rational(1, 6), Pow(Integer(6), Rational(1, 2)))",
+    "Mul(Rational(1, 6), Pow(Integer(6), Rational(1, 2)))"
+   ],
+   [
+    "Integer(0)",
+    "Mul(Rational(1, 3), Pow(Integer(6), Rational(1, 2)))"
+   ],
+   [
+    "Integer(0)",
+    "Integer(0)"
+   ]
+  ]
+ },
+ {
+  "p": 5,
+  "anchor": 1,
+  "rotation": 4,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 0,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 2,
+    "dir_index": 5,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Mul(Rational(1, 15), Pow(Integer(30), Rational(1, 2)))",
+    "Mul(Rational(1, 3), Pow(Integer(6), Rational(1, 2)))"
+   ],
+   [
+    "Integer(0)",
+    "Mul(Rational(1, 3), Pow(Integer(6), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(1, 15), Pow(Integer(30), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(1, 15), Pow(Integer(30), Rational(1, 2))), Mul(Rational(1, 3), Pow(Integer(6), Rational(1, 2))))"
+   ]
+  ]
+ },
+ {
+  "p": 7,
+  "anchor": 2,
+  "rotation": 0,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 3,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 1,
+    "dir_index": 5,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Integer(0)",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(2, 105), Pow(Integer(210), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Integer(0)",
+    "Pow(Integer(2), Rational(1, 2))"
+   ]
+  ]
+ },
+ {
+  "p": 11,
+  "anchor": 2,
+  "rotation": 5,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 6,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 1,
+    "dir_index": 1,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Add(Mul(Integer(-1), Rational(2, 385), Pow(Integer(770), Rational(1, 2))), Mul(Rational(1, 15), Pow(Integer(30), Rational(1, 2))))",
+    "Add(Mul(Rational(2, 385), Pow(Integer(770), Rational(1, 2))), Mul(Rational(1, 3), Pow(Integer(6), Rational(1, 2))))"
+   ],
+   [
+    "Add(Mul(Integer(-1), Rational(4, 385), Pow(Integer(770), Rational(1, 2))), Mul(Rational(1, 15), Pow(Integer(30), Rational(1, 2))))",
+    "Mul(Rational(1, 3), Pow(Integer(6), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(1, 15), Pow(Integer(30), Rational(1, 2)))",
+    "Mul(Rational(1, 3), Pow(Integer(6), Rational(1, 2)))"
+   ]
+  ]
+ },
+ {
+  "p": 13,
+  "anchor": 2,
+  "rotation": 1,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 5,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 1,
+    "dir_index": 0,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Mul(Rational(4, 1001), Pow(Integer(1001), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(4, 1001), Pow(Integer(1001), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(8, 1001), Pow(Integer(1001), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Integer(0)",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ]
+  ]
+ },
+ {
+  "p": 17,
+  "anchor": 2,
+  "rotation": 0,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 3,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 1,
+    "dir_index": 5,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Integer(0)",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(8, 17017), Pow(Integer(102102), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(8, 17017), Pow(Integer(102102), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(8, 17017), Pow(Integer(102102), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Integer(0)",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ]
+  ]
+ },
+ {
+  "p": 19,
+  "anchor": 1,
+  "rotation": 4,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 0,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 2,
+    "dir_index": 5,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Add(Mul(Integer(-1), Rational(2, 385), Pow(Integer(770), Rational(1, 2))), Mul(Rational(32, 323323), Pow(Integer(1939938), Rational(1, 2))), Mul(Rational(1, 15), Pow(Integer(30), Rational(1, 2))))",
+    "Add(Mul(Rational(2, 385), Pow(Integer(770), Rational(1, 2))), Mul(Rational(1, 3), Pow(Integer(6), Rational(1, 2))))"
+   ],
+   [
+    "Add(Mul(Integer(-1), Rational(2, 385), Pow(Integer(770), Rational(1, 2))), Mul(Rational(1, 15), Pow(Integer(30), Rational(1, 2))))",
+    "Add(Mul(Rational(2, 385), Pow(Integer(770), Rational(1, 2))), Mul(Rational(1, 3), Pow(Integer(6), Rational(1, 2))))"
+   ],
+   [
+    "Add(Mul(Integer(-1), Rational(2, 385), Pow(Integer(770), Rational(1, 2))), Mul(Rational(32, 323323), Pow(Integer(1939938), Rational(1, 2))), Mul(Rational(1, 15), Pow(Integer(30), Rational(1, 2))))",
+    "Add(Mul(Integer(-1), Rational(32, 323323), Pow(Integer(1939938), Rational(1, 2))), Mul(Rational(2, 385), Pow(Integer(770), Rational(1, 2))), Mul(Rational(1, 3), Pow(Integer(6), Rational(1, 2))))"
+   ]
+  ]
+ },
+ {
+  "p": 23,
+  "anchor": 2,
+  "rotation": 0,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 3,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 1,
+    "dir_index": 5,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Mul(Rational(2, 105), Pow(Integer(210), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(192, 7436429), Pow(Integer(22309287), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Add(Mul(Rational(192, 7436429), Pow(Integer(22309287), Rational(1, 2))), Mul(Rational(2, 105), Pow(Integer(210), Rational(1, 2))))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(192, 7436429), Pow(Integer(22309287), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(2, 105), Pow(Integer(210), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ]
+  ]
+ },
+ {
+  "p": 29,
+  "anchor": 2,
+  "rotation": 1,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 5,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 1,
+    "dir_index": 0,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Mul(Rational(192, 19605131), Pow(Integer(58815393), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(8, 17017), Pow(Integer(102102), Rational(1, 2))), Mul(Integer(-1), Rational(192, 19605131), Pow(Integer(58815393), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(384, 19605131), Pow(Integer(58815393), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(8, 17017), Pow(Integer(102102), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Integer(0)",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(8, 17017), Pow(Integer(102102), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ]
+  ]
+ },
+ {
+  "p": 31,
+  "anchor": 2,
+  "rotation": 0,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 3,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 1,
+    "dir_index": 5,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Integer(0)",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(8, 17017), Pow(Integer(102102), Rational(1, 2))), Mul(Integer(-1), Rational(384, 86822723), Pow(Integer(520936338), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(384, 86822723), Pow(Integer(520936338), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(8, 17017), Pow(Integer(102102), Rational(1, 2))), Mul(Integer(-1), Rational(384, 86822723), Pow(Integer(520936338), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Integer(0)",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(8, 17017), Pow(Integer(102102), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ]
+  ]
+ },
+ {
+  "p": 37,
+  "anchor": 2,
+  "rotation": 2,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 0,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 1,
+    "dir_index": 4,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Add(Mul(Rational(2304, 3212440751), Pow(Integer(16062203755), Rational(1, 2))), Mul(Rational(4, 1001), Pow(Integer(1001), Rational(1, 2))))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(4, 1001), Pow(Integer(1001), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Add(Mul(Rational(2304, 3212440751), Pow(Integer(16062203755), Rational(1, 2))), Mul(Rational(4, 1001), Pow(Integer(1001), Rational(1, 2))))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(4, 1001), Pow(Integer(1001), Rational(1, 2))), Mul(Rational(2304, 3212440751), Pow(Integer(16062203755), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(4, 1001), Pow(Integer(1001), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(4, 1001), Pow(Integer(1001), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ]
+  ]
+ },
+ {
+  "p": 41,
+  "anchor": 1,
+  "rotation": 7,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 6,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 2,
+    "dir_index": 2,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Add(Integer(-1), Mul(Integer(-1), Rational(6912, 131710070791), Pow(Integer(1317100707910), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))",
+    "Mul(Rational(6912, 131710070791), Pow(Integer(1317100707910), Rational(1, 2)))"
+   ],
+   [
+    "Add(Integer(-1), Pow(Integer(2), Rational(1, 2)))",
+    "Integer(0)"
+   ],
+   [
+    "Add(Integer(-1), Pow(Integer(2), Rational(1, 2)))",
+    "Mul(Rational(13824, 131710070791), Pow(Integer(1317100707910), Rational(1, 2)))"
+   ]
+  ]
+ },
+ {
+  "p": 43,
+  "anchor": 1,
+  "rotation": 7,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 6,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 2,
+    "dir_index": 2,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Add(Integer(-1), Mul(Integer(-1), Rational(138240, 5663533044013), Pow(Integer(5663533044013), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))",
+    "Add(Mul(Rational(138240, 5663533044013), Pow(Integer(5663533044013), Rational(1, 2))), Mul(Rational(13824, 131710070791), Pow(Integer(1317100707910), Rational(1, 2))))"
+   ],
+   [
+    "Add(Integer(-1), Pow(Integer(2), Rational(1, 2)))",
+    "Mul(Rational(13824, 131710070791), Pow(Integer(1317100707910), Rational(1, 2)))"
+   ],
+   [
+    "Add(Integer(-1), Pow(Integer(2), Rational(1, 2)))",
+    "Add(Mul(Rational(276480, 5663533044013), Pow(Integer(5663533044013), Rational(1, 2))), Mul(Rational(13824, 131710070791), Pow(Integer(1317100707910), Rational(1, 2))))"
+   ]
+  ]
+ },
+ {
+  "p": 47,
+  "anchor": 2,
+  "rotation": 7,
+  "edges": [
+   {
+    "vertex": 0,
+    "dir_index": 7,
+    "hypotenuse": false
+   },
+   {
+    "vertex": 1,
+    "dir_index": 3,
+    "hypotenuse": true
+   }
+  ],
+  "verts": [
+   [
+    "Add(Mul(Integer(-1), Rational(138240, 266186053068611), Pow(Integer(11179814228881662), Rational(1, 2))), Mul(Rational(2, 105), Pow(Integer(210), Rational(1, 2))))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(138240, 266186053068611), Pow(Integer(11179814228881662), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(2, 105), Pow(Integer(210), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Mul(Integer(-1), Rational(276480, 266186053068611), Pow(Integer(11179814228881662), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ],
+   [
+    "Mul(Rational(2, 105), Pow(Integer(210), Rational(1, 2)))",
+    "Add(Mul(Integer(-1), Rational(2, 105), Pow(Integer(210), Rational(1, 2))), Pow(Integer(2), Rational(1, 2)))"
+   ]
+  ]
+ }
+]
