@@ -1,10 +1,10 @@
-# Companion code — *A Geometric Sieve of Eratosthenes*
+ # Companion code — *A Geometric Sieve of Eratosthenes*
 
 Reproduction code and certified data for the paper
 **"A Geometric Sieve of Eratosthenes: Least-prime-factor densities, perfect packings, and the integers as a point set"** (P. Upham).
 
 For each prime *p*, let *d_p* be the natural density of the integers whose least prime factor is *p*
-(so *d_p* = (1/p)∏_{q<p}(1−1/q) and Σ_p *d_p* = 1). This code certifies the paper's two unconditional
+(so *d_p* = (1/p)∏_{q<p}(1−1/q) and Σ_p *d_p* = 1). This code certifies the paper's three unconditional
 perfect-packing results and generates its figures and empirical data:
 
 * **Rectangle (§5).** The aspect-√2 rectangle is perfectly packed by similar rectangles of areas *d_p* —
@@ -13,8 +13,13 @@ perfect-packing results and generates its figures and empirical data:
   *d_p* in two orientations — a 1650-piece certified head (exact rational Perram–Wertheim disjointness
   witnesses, interval containment) plus the eroded-volume capacity tail, and the ten further certified
   *state heads* that carry the recursive integer dissection into elliptical cells.
-* **Triangle (§7, conjectural).** The exact 15-piece base packing behind the conditional reduction,
-  verified symbolically in ℚ(√2,…,√47).
+* **Triangle (§7).** The isosceles right triangle is perfectly packed by similar triangles of areas *d_p*
+  in the eight 45° orientations — a 10906-piece certified head (exact-rational and 100-bit interval
+  containment margins, separating-axis disjointness witnesses on a rational-edge frame) plus the same
+  eroded-volume capacity tail, now with the triangle's mixed-area constant κ_T = 3/√2, and the certified
+  family of **45 per-state heads** (states 2…197) that carry the recursive integer dissection into
+  triangular cells. An exact 15-piece algebraic base, verified symbolically in ℚ(√2,…,√47), anchors the
+  head's first pieces.
 * **Staircase (§3).** The staircase limit-angle constant L and θ\* = arctan(e^L) ≈ 56.29°.
 
 ---
@@ -37,11 +42,17 @@ perfect-packing results and generates its figures and empirical data:
 | `ellipse_head_n1650.json` | The certified **container head** (state 2): 1650 pieces, primes 2…13967, exact dyadic centers, orientation pattern, ρ = 0.6296271949192772. |
 | `head_s3.json` … `head_s31.json` | The ten further certified **state heads** of the state-comparison proposition (states 3, 5, 7, 11, 13, 17, 19, 23, 29, 31 with n = 1044, 755, 594, 474, 405, 321, 273, 209, 171, 115). Every state s ≥ 37 is covered by the tail from its first piece, so these eleven heads are exactly what the recursive dissection of ℕ into elliptical cells requires. |
 
-### Triangle model (§7)
+### Triangle proof (§7)
 
 | File | Role |
 |------|------|
-| `triangle_base_exact.py` | The exact base-packing verifier (Proposition "Base validity, exact"): reconstructs the 15-piece packing in ℚ(√2,…,√47), proves each area = *d_p*, decides all 135 containment sign-tests and 105 separating-edge certificates exactly, and certifies an inscribed disk of radius ≥ 0.106 in the free region (centre certified in 200-bit interval arithmetic). |
+| `triangle_certify.py` | The rigorous triangle certifier. `certify` reads a head JSON and proves, fail-closed: area shares equal the exact σ_s(q) (reconstructed from *(state, n)*, never parsed); every piece contained by **exact-rational** margins where a contact's radical coefficient vanishes (the intended leg/hypotenuse contacts) and 100-bit `mpmath` interval margins otherwise; every pair disjoint by a **separating-axis witness** among the eight directions *k*·45° (which contain every edge normal). `tail` evaluates the eroded-volume criterion with κ_T = 3/√2, reports the disciplined crossover q₀ = 115363 and head size π(q₀) = 10906, and checks the analytic majorant. |
+| `triangle_build.py` | The head builder: corner-anchored greedy over 24 templates (8 orientations × 3 anchor vertices), contact-length (deepest-nestle) scoring, vectorized separating-axis overlap tests with a spatial grid, touch-then-nudge clearance snapped to the 2⁻⁴⁰ dyadic grid, escalating back-off jam repair, checkpoint/resume. `--state s` builds the state-*s* head (target auto-computed from the crossover); `--design disciplined` is the certified schedule. Output JSON feeds `triangle_certify.py` directly. |
+| `run_triangle_states.py` | Drives the whole integer family: for each prime state 2…terminal it builds (via `triangle_build`) and certifies (via `triangle_certify`) one head, reuses any already-`CERTIFIED` head, and writes `states/tri_state_<s>.json` plus `states/manifest.json`. `--only`, `--keep-going`, `--certify-only` for subsets / re-verification. |
+| `triangle_head_n10906.json` | The certified **container head** (state 2): 10906 pieces, primes 2…115363, disciplined schedule, rational-edge frame (`hypotenuse-on-x-axis`). Schema below. |
+| `states/tri_state_<s>.json` | The **45 certified state heads** (states 2, 3, 5, …, 197; sizes 10906 down to 398, total 118593 pieces). Every state *s* ≥ 199 is covered by the tail from its first piece, so these 45 heads are exactly what the recursive dissection of ℕ into triangular cells requires. Same schema as the container head. |
+| `states/manifest.json` | Family manifest: design, p0, per-state `{state, n, head, status}`, total piece count, terminal state, and `all_certified`. |
+| `triangle_base_exact.py` | The exact algebraic base verifier (Remark "An exact algebraic base"): reconstructs the first 15 pieces (primes 2…47) in ℚ(√2,…,√47), proves each area = *d_p*, and decides all 135 containment sign-tests and 105 separating-edge certificates exactly — a stricter, fully symbolic check on the head's first pieces. |
 | `_greedy.py` | The greedy placement core used by `triangle_base_exact.py` — extracted **verbatim** from `make_data.py` and frozen, so the exact verifier reproduces the same combinatorial choices without depending on the figure pipeline. The duplication with `make_data.py` is deliberate. |
 | `base_combinatorics.json` | Frozen 15-piece base combinatorics (prime, anchor, rotation, per-edge direction, exact vertices); lets `triangle_base_exact.py --frozen` re-verify the base packing with no float greedy / GEOS dependence. |
 
@@ -76,10 +87,10 @@ pip install numpy scipy mpmath sympy shapely matplotlib
 Tested with (pin these for exact reproduction of the certificates and the frozen base record):
 `numpy 2.4.4`, `scipy 1.x`, `sympy 1.14.0`, `mpmath 1.3.0`, `shapely 2.1.2` (GEOS 3.x), `matplotlib 3.x`, Python 3.11.
 
-* `mpmath` — 200-bit interval arithmetic for the rectangle certificates, the ellipse containment
-  certification, and the inscribed-disk certification in `triangle_base_exact.py`.
+* `mpmath` — interval arithmetic for the rectangle certificates (200-bit), the ellipse containment
+  certification, and the triangle containment margins (`triangle_certify.py`, 100-bit).
 * `sympy` — exact symbolic computation in ℚ(√2,…,√47) (`triangle_base_exact.py`) and exact prime/density
-  bookkeeping for the ellipse scripts.
+  bookkeeping for the ellipse and triangle scripts.
 * `shapely` — floating-point polygon geometry (GEOS); used **only** to select packing combinatorics and to
   render figures. Every certified inequality is decided exactly (`sympy` / `Fraction`) or by
   directed-rounding interval arithmetic (`mpmath`), never by `shapely`.
@@ -88,9 +99,11 @@ Tested with (pin these for exact reproduction of the certificates and the frozen
 * `numpy`, `matplotlib` — sieving, statistics, and figures.
 
 Per script: `rect_exact.py` needs only `numpy` + `mpmath`; `ellipse_certify.py` needs `numpy` + `mpmath` +
-`sympy`; `ellipse_build.py` needs `numpy` + `scipy` + `sympy`; `triangle_base_exact.py` needs `numpy` +
-`sympy` + `mpmath` + `shapely` (and its `_greedy.py` core); the figure pipeline needs `shapely` +
-`matplotlib` + `sympy`.
+`sympy`; `ellipse_build.py` needs `numpy` + `scipy` + `sympy`; `triangle_certify.py` needs `numpy` + `mpmath`
++ `sympy`; `triangle_build.py` needs only `numpy`; `run_triangle_states.py` needs `numpy` + `sympy` (it imports
+`triangle_build` and shells out to `triangle_certify`); `triangle_base_exact.py` needs `numpy` + `sympy` +
+`mpmath` + `shapely` (and its `_greedy.py` core); the figure pipeline needs `shapely` + `matplotlib` +
+`sympy`.
 
 ---
 
@@ -134,16 +147,37 @@ rigorous distance pruning for far pairs) and a certified negative max support ga
 covers area Σ_{p≤13967} d_p = 1 − R_{<13997}; together with the `tail` crossover this is the
 computer-assisted half of the ellipse theorem.
 
-### Triangle base packing (§7)
+### Triangle (§7)
 
 ```bash
-python triangle_base_exact.py                       # float greedy fixes the combinatorics, then exact/interval proof
-python triangle_base_exact.py --frozen              # replay from base_combinatorics.json (no greedy/GEOS)
-python triangle_base_exact.py --emit-record base_combinatorics.json   # (re)freeze the combinatorics
+# Certify the 10906-piece container head: exact sigma_2(q) areas, exact-rational or
+# 100-bit interval containment margins, separating-axis disjointness witnesses.
+python triangle_certify.py certify --in triangle_head_n10906.json --design disciplined
+
+# Tail crossover: the eroded-volume criterion (kappa_T = 3/sqrt2) holds for every
+# prime q > q0 = 115363 (head size pi(q0) = 10906), plus the analytic majorant.
+python triangle_certify.py tail --design disciplined
+
+# Build + certify the whole 45-state integer family in one pass (writes states/).
+# Drop the container head in first so state 2 is reused, not rebuilt:
+cp triangle_head_n10906.json states/tri_state_2.json
+python run_triangle_states.py --design disciplined --p0 1000 --outdir states
 ```
 
-Expected: `CERTIFIED` with `135/135`, `105/105`, free area = R_{<50}, and inscribed-disk radius ≥ 0.106
-(centre certified in the free region); `--frozen` gives the same result from the stored record alone.
+Expected certify output: `STATUS: CERTIFIED` with all 98154 containment margins ≥ 0 (11 exact-zero leg
+contacts), all pairs disjoint by separating-axis witnesses, least certified gap ≈ 3.5×10⁻¹⁸. Expected family
+output: `45/45 states CERTIFIED, 118593 pieces`, `FAMILY CERTIFIED`, least gap over the family ≈ 4.2×10⁻¹⁸.
+Together with the `tail` crossover these are the computer-assisted half of the unconditional triangle theorem
+and its integer corollary.
+
+```bash
+# Optional stricter check: the exact algebraic base (first 15 primes) in Q(sqrt2..sqrt47).
+python triangle_base_exact.py                       # float greedy fixes the combinatorics, then exact proof
+python triangle_base_exact.py --frozen              # replay from base_combinatorics.json (no greedy/GEOS)
+```
+
+Expected: `CERTIFIED` with `135/135`, `105/105`, free area = R_{<50}; `--frozen` gives the same result from
+the stored record alone.
 
 ### Staircase constant (§3)
 
@@ -225,6 +259,67 @@ recent pieces with escalating window sizes. `--state s` builds the state-*s* hea
 | `verification.centers_normalized` | (x, u) with y = ρu — the builder's working frame |
 | `verification.area_shares_float` | float echoes of σ_s(q), matched (not trusted) by the certifier |
 | `verification.sum_head_area_float` | float head area |
+
+---
+
+## `triangle_certify.py`, `triangle_build.py`, `run_triangle_states.py` — the triangle theorem
+
+```
+python triangle_certify.py certify [--in triangle_head_n10906.json] [--design disciplined] [--prec 100] [--state 2]
+python triangle_certify.py tail    [--design disciplined] [--p0 1000] [--X 4000000] [--state 2]
+python triangle_build.py [--state 2] [--design disciplined] [--p0 1000] [--target-n 0] [--out FILE] \
+    [--checkpoint FILE] [--ckpt-every 500] [--resume FILE] [--seed 7] [--time-cap SECS]
+python run_triangle_states.py [--design disciplined] [--p0 1000] [--outdir states] \
+    [--only 197,193,191] [--max-state 400] [--keep-going] [--certify-only]
+```
+
+* **`certify`** — loads a head JSON, treats the stored dyadic anchor coordinates as **exact rationals**, and
+  reconstructs every area share as the exact σ_s(q) = d_q/R_{<s} from *(state, n)* (never parsed from the
+  file). It then proves, fail-closed:
+  * every piece contained by a per-vertex edge margin against the three rational frame edges — decided by
+    **exact `Fraction` arithmetic** where the vertex's radical coefficient vanishes (the intended leg /
+    hypotenuse contacts, which certify as exact zeros), and by directed-rounding `mpmath.iv` interval
+    arithmetic otherwise;
+  * every pair disjoint by a separating-axis witness among the eight directions *k*·45° — these contain
+    every edge normal of every piece — a certified positive gap being the witness (far pairs pruned by a
+    padded bounding box), in exact parallel to the ellipse's rational Perram–Wertheim witnesses.
+* **`tail`** — the eroded-volume criterion (*b* + 2 Σ √d_p·V_p)/√(q·R_{<q}) + N_q/q < 1 with the mixed-area
+  table *V_p* and κ_T = 3/√2; reports the disciplined crossover q₀ = 115363 (head π(q₀) = 10906) and checks
+  the analytic majorant. `--state s` runs the criterion in a state-*s* cell (relative shares σ_s(q)).
+* **`build`** — the numerical **discovery** tool: corner-anchored greedy over the 24 templates, deepest-nestle
+  scoring, separating-axis overlap with a spatial grid, touch-then-nudge clearance snapped to the 2⁻⁴⁰ grid,
+  escalating jam repair, checkpoint/resume. State 2 is seeded with the exact canonical half-split (*p* = 2);
+  all rigor lives in `triangle_certify.py`.
+* **`run_triangle_states`** — builds and certifies the full family, reusing any head already marked
+  `CERTIFIED` (drop the container head at `states/tri_state_2.json` to reuse it). Writes one head per state and
+  `states/manifest.json`.
+
+### Triangle head JSON schema
+
+| Key | Meaning |
+|-----|---------|
+| `format` | `"triangle-head"` |
+| `frame` | `"hypotenuse-on-x-axis"` — the rational-edge frame (base triangle (0,0),(1,0),(0,1); edges *y* ≥ 0, *x*+*y* ≤ 1, *y*−*x* ≤ 1) |
+| `design`, `p0` | schedule (`disciplined`) and its free-orientation cutoff (1000) |
+| `state`, `n`, `q_last` | least admissible child prime *s* (2 = container), piece count, last prime placed |
+| `note` | advisory (`"BUILT (verify with triangle_certify.py certify)"`); status is **not** asserted — run the certifier |
+| `pieces` | array of *n* records `[p, k, a, ax, ay]` |
+
+Each piece record is `[p, k, a, ax, ay]`: prime *p*; orientation *k* ∈ {0,…,7} (rotation by *k*·45°);
+anchor-vertex index *a* ∈ {0,1,2}; and the dyadic anchor point (*ax*, *ay*). The piece's vertices are
+`anchor + L_p·(Rot_k(base) − Rot_k(base)[a])` with L_p = √(2 *d_p*) and base = (0,0),(1,0),(0,1) — so the whole
+head is reconstructed exactly from these five numbers per piece, and the certifier recomputes areas and
+contacts symbolically rather than trusting any stored geometry.
+
+### `states/manifest.json` schema
+
+| Key | Meaning |
+|-----|---------|
+| `design`, `p0` | schedule and cutoff for the family |
+| `states` | array of `{ "state": s, "n": pieces, "head": "tri_state_s.json", "status": "CERTIFIED" }` |
+| `total_pieces` | sum over the family (118593 for the disciplined *p0* = 1000 family) |
+| `terminal_state` | first state with an empty head (199 — tail-covered from its first piece) |
+| `all_certified` | `true` only if every listed state certified |
 
 ---
 
@@ -333,7 +428,11 @@ Every `fit_margin ≥ 0` is a rigorous interval-arithmetic certificate that the 
 | Ellipse tail crossover (Lemma `lem:ellthresh`, Theorem `thm:ellipse`) | `python ellipse_certify.py tail` |
 | Eleven state heads (§6, Prop. `prop:states`) | `python ellipse_certify.py certify --in head_sN.json` for N ∈ {3,5,7,11,13,17,19,23,29,31} |
 | Integers in elliptical cells (§6, Theorem `thm:ellintegers`) | the eleven certified heads + `python ellipse_recursion_figure.py …` |
-| Triangle base packing (§7, Prop. `prop:base`) | `python triangle_base_exact.py` (or `--frozen`) |
+| Triangle certified head (§7, Theorem `thm:trihead`) | `python triangle_certify.py certify --in triangle_head_n10906.json --design disciplined` |
+| Triangle tail crossover (Prop. `prop:tricross`, Theorem `thm:tripack`) | `python triangle_certify.py tail --design disciplined` |
+| 45 state heads (§7, Prop. `prop:tristates`) | `python run_triangle_states.py --design disciplined --outdir states` |
+| Integers in triangular cells (§7, Theorem `thm:triintegers`) | the 45 certified heads (`states/manifest.json` → `all_certified: true`) |
+| Triangle exact algebraic base (§7, Remark `rem:tribase`) | `python triangle_base_exact.py` (or `--frozen`) |
 | §5 packing figure | `python make_figures.py rect_packing` |
 | §6 packing figure | `python ellipse_figure.py --in ellipse_head_n1650.json` |
 | §8 vertex statistics | `python make_data.py greedy --nmax 355 && python make_figures.py vertex_stats` |
@@ -345,9 +444,10 @@ Every `fit_margin ≥ 0` is a rigorous interval-arithmetic certificate that the 
 If you use this code, please cite the paper. This paper is archived at Zenodo:
 [https://doi.org/10.5281/zenodo.21283480](https://doi.org/10.5281/zenodo.21283480) (DOI `10.5281/zenodo.21283480`).
 
-The certificates `head_certificate_sqrt2.json`, `ellipse_head_n1650.json`, and the ten state heads
-`head_s3.json`–`head_s31.json`, together with the finite-window interval evaluations, are the archival
-record behind the paper's two computer-assisted theorems.
+The certificates `head_certificate_sqrt2.json`, `ellipse_head_n1650.json` and the ten state heads
+`head_s3.json`–`head_s31.json`, and `triangle_head_n10906.json` with the 45 state heads under `states/`
+(and their `manifest.json`), together with the finite-window interval evaluations, are the archival record
+behind the paper's three computer-assisted theorems.
 
 ## License
 
