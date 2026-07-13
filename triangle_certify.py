@@ -26,14 +26,25 @@ all non-exact margins >= ~1e-9 and all pair gaps >= ~1e-7, far above interval wi
              v(4)=V(-T,-T)=1; the erosion identity C(-)sC=(1-s)C gives boundary
              tax 2s for container-oriented K (b=2), and the 180deg erosion tax is
              < 4s. Designs:
-               uniform8            all 8 orientations everywhere: b=2, V<=kappa_T
+               uniform8            predecessors in all 8 orientations, candidates
+                                   container-aligned: b=2, V<=kappa_T
                                    --> q0 = 662177, head = 53730;
-               disciplined --p0 Q  free orientations for p<=Q, strictly alternating
-                                   {0,180} beyond, next-piece K adaptive in {0,180}:
-                                   averaging the two K choices bounds the free mass
-                                   by weight max_k (v(k)+v(k+4))/2 = 2, alternating
-                                   mass by (v(0)+v(4))/2 = 3/2, boundary by 3s
+               disciplined --p0 Q  free orientations for p<=Q; later candidates
+                                   ADAPTIVE in {0,180} (averaging the two candidate
+                                   orientations shows one is always available).
+                                   Averaged weights abar_k=(v(k)+v(k+4))/2:
+                                   abar = (3/2, 5/(2*sqrt2), 2, 5/(2*sqrt2), ...),
+                                   so 3/2 exactly for {0,180} predecessors and
+                                   worst case max_k abar_k = 2 for the free segment;
+                                   boundary (2s+4s)/2 = 3s. Criterion:
+                                   (3 + 3*T(q) + 2H)/sqrt(q R_<q) + N_q/q < 1 with
+                                   2H <= Cf = sum_{p<=Q} sqrt(d_p) the worst-case
+                                   free-orientation excess (head-independent; the
+                                   built head realizes 2H = 2.18)
                                    --> Q=1000: q0 = 115363, head = 10906.
+                                   NB the built heads strictly alternate 0/180 past
+                                   Q (enforced by certify); the tail schedule is
+                                   adaptive, which is what the averaging proves.
              The analytic majorant of Appendix A applies verbatim with kappa_T in
              place of kappa (the shape enters only through the mixed-area constant).
     certify  reads a builder head JSON and proves, fail-closed:
@@ -104,13 +115,28 @@ def tail(design="uniform8", p0=1000, X=4_000_000, state=2, quiet=False):
               f"holds from {nxt} (value {crit[jj+1]:.6f}<1)")
         print(f"HEAD size = #(primes in [{state},q0]) = {head} triangles")
     if quiet: return q0, head
+    # Analytic majorant beyond the finite window X. Numerators (state s, unnormalized):
+    #   uniform8:    2*sqrt(Rs) + 2*kappa_T*T_s(q)           -> coeff 2*kappa_T, const 2*sqrt(Rs)
+    #   disciplined: 3*sqrt(Rs) + 3*T_s(q) + 2H_s,
+    #                2H_s <= Cf_s := sum_{s<=p<=p0} sqrt(d_p) -> coeff 3, const 3*sqrt(Rs)+Cf_s
+    # (the +Cf_s term is the worst case of the free-orientation excess; dropping it, as an
+    #  earlier revision did, understates the disciplined majorant by Cf_s/sqrt(q R_<q)).
     g = 0.5772156649; ell = math.log(1e5); beta = math.exp(-g)*(1-1/ell**2); A1e5 = 2.3355
-    kap = KAPPA8 if design == "uniform8" else 1.5
+    if design == "uniform8":
+        coeff, const = 2.0*KAPPA8, 2.0*sRs
+    else:
+        i0 = int(np.searchsorted(P, p0, side='right'))
+        Cf_s = float(sq[i_s:i0].sum())
+        coeff, const = 3.0, 3.0*sRs + Cf_s
     def M(q):
         Lq = math.log(q)
-        return 2*kap*A1e5/(math.sqrt(beta)*Lq) + 2*kap/math.sqrt(q*(beta/Lq)) + (1/Lq)*(1+1.2762/Lq)
+        return coeff*A1e5/(math.sqrt(beta)*Lq) + const/math.sqrt(q*(beta/Lq)) + (1/Lq)*(1+1.2762/Lq)
     for q in (1e6, 4e6, 1e7):
         print(f"  analytic majorant M({int(q)}) = {M(q):.4f}  (<1: {M(q) < 1})")
+    handoff = float(M(X))
+    print(f"  handoff: finite interval window reaches X={X}, M(X)={handoff:.4f}"
+          + ("  OK (majorant covers the tail from X)" if handoff < 1 else
+             "  !! INCREASE --X: majorant does not yet cover the tail at X"))
     return q0, head
 
 # ------------------------------------------------------------------ exact geometry
