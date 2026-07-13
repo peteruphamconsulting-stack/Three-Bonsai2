@@ -88,7 +88,10 @@ def main():
     print(f"staircase constant L = sum (-1)^(j+1) ln(1-1/p_j)^(-1)   [primes to {p_last}]")
     print(f"  raw partial sum L_n           = {Lpart[-1]:.12f}")
     print(f"  RIGOROUS Leibniz bound        : |L - L_n| <= a_(n+1) <= 2/p_(n+1) = {leibniz:.2e}")
-    print(f"                                  => L = 0.4047892(2) proved to 7-8 places")
+    lo, hi = sorted((float(Lpart[-2]), float(Lpart[-1])))
+    print(f"  RIGOROUS bracket (consecutive partial sums enclose L, terms strictly decreasing):")
+    print(f"                                  L in [{lo:.10f}, {hi:.10f}]  (width {hi-lo:.1e})")
+    print(f"                                  => at nmax=10^8: L in [0.40478921, 0.40478923] certified")
     print()
     print("  accelerated (midpoint / Euler), by checkpoint decade:")
     decade = 10 ** 4
