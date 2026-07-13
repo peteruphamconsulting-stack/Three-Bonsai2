@@ -1,0 +1,280 @@
+{
+ "design": "disciplined",
+ "p0": 1000,
+ "states": [
+  {
+   "state": 2,
+   "n": 10906,
+   "head": "tri_state_2.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 3,
+   "n": 8116,
+   "head": "tri_state_3.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 5,
+   "n": 6643,
+   "head": "tri_state_5.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 7,
+   "n": 5867,
+   "head": "tri_state_7.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 11,
+   "n": 5229,
+   "head": "tri_state_11.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 13,
+   "n": 4835,
+   "head": "tri_state_13.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 17,
+   "n": 4512,
+   "head": "tri_state_17.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 19,
+   "n": 4201,
+   "head": "tri_state_19.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 23,
+   "n": 3952,
+   "head": "tri_state_23.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 29,
+   "n": 3723,
+   "head": "tri_state_29.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 31,
+   "n": 3514,
+   "head": "tri_state_31.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 37,
+   "n": 3322,
+   "head": "tri_state_37.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 41,
+   "n": 3192,
+   "head": "tri_state_41.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 43,
+   "n": 3030,
+   "head": "tri_state_43.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 47,
+   "n": 2898,
+   "head": "tri_state_47.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 53,
+   "n": 2753,
+   "head": "tri_state_53.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 59,
+   "n": 2683,
+   "head": "tri_state_59.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 61,
+   "n": 2533,
+   "head": "tri_state_61.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 67,
+   "n": 2415,
+   "head": "tri_state_67.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 71,
+   "n": 2302,
+   "head": "tri_state_71.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 73,
+   "n": 2205,
+   "head": "tri_state_73.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 79,
+   "n": 2120,
+   "head": "tri_state_79.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 83,
+   "n": 2020,
+   "head": "tri_state_83.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 89,
+   "n": 1921,
+   "head": "tri_state_89.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 97,
+   "n": 1867,
+   "head": "tri_state_97.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 101,
+   "n": 1783,
+   "head": "tri_state_101.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 103,
+   "n": 1657,
+   "head": "tri_state_103.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 107,
+   "n": 1621,
+   "head": "tri_state_107.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 109,
+   "n": 1545,
+   "head": "tri_state_109.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 113,
+   "n": 1442,
+   "head": "tri_state_113.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 127,
+   "n": 1366,
+   "head": "tri_state_127.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 131,
+   "n": 1317,
+   "head": "tri_state_131.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 137,
+   "n": 1256,
+   "head": "tri_state_137.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 139,
+   "n": 1196,
+   "head": "tri_state_139.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 149,
+   "n": 1141,
+   "head": "tri_state_149.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 151,
+   "n": 1024,
+   "head": "tri_state_151.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 157,
+   "n": 974,
+   "head": "tri_state_157.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 163,
+   "n": 930,
+   "head": "tri_state_163.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 167,
+   "n": 871,
+   "head": "tri_state_167.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 173,
+   "n": 803,
+   "head": "tri_state_173.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 179,
+   "n": 740,
+   "head": "tri_state_179.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 181,
+   "n": 649,
+   "head": "tri_state_181.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 191,
+   "n": 591,
+   "head": "tri_state_191.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 193,
+   "n": 530,
+   "head": "tri_state_193.json",
+   "status": "CERTIFIED"
+  },
+  {
+   "state": 197,
+   "n": 398,
+   "head": "tri_state_197.json",
+   "status": "CERTIFIED"
+  }
+ ],
+ "total_pieces": 118593,
+ "terminal_state": 199,
+ "all_certified": true,
+ "elapsed_sec": 2491.9
+}
