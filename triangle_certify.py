@@ -45,8 +45,9 @@ all non-exact margins >= ~1e-9 and all pair gaps >= ~1e-7, far above interval wi
                                    NB the built heads strictly alternate 0/180 past
                                    Q (enforced by certify); the tail schedule is
                                    adaptive, which is what the averaging proves.
-             The analytic majorant of Appendix A applies verbatim with kappa_T in
-             place of kappa (the shape enters only through the mixed-area constant).
+             Revised tail certificate uses an outward-rounded finite window
+             and includes the entire Dusart prime-count contribution in its
+             explicit analytic majorant.
     certify  reads a builder head JSON and proves, fail-closed:
              * areas == d_p exactly (reconstructed from n, never parsed);
              * CONTAINMENT: per-vertex margins for the three rational edge lines,
@@ -80,64 +81,14 @@ def _sieve(n):
         if s[i]: s[i*i::i] = False
     return np.flatnonzero(s).astype(np.float64)
 
-def tail(design="uniform8", p0=1000, X=4_000_000, state=2, quiet=False):
-    """Crossover for the state-s region. Using sigma_s(q)=d_q/R_<s and
-    R^(s)_<q = R_<q/R_<s, every state quantity reduces to a global one scaled by
-    R_<s, so the criterion is exact in the global prime arrays (verified: s=2
-    reproduces the base 115363/10906 and 662177/53730)."""
-    P = _sieve(X)
-    logR = np.concatenate([[0.0], np.cumsum(np.log1p(-1.0/P))])[:-1]
-    R = np.exp(logR); sq = np.sqrt(R/P)
-    Tc = np.concatenate([[0.0], np.cumsum(sq)])[:-1]           # Tc[j]=sum_{i<j} sqrt(d_i)
-    i_s = int(np.searchsorted(P, state)); Rs = R[i_s]; sRs = math.sqrt(Rs)
-    j = np.arange(i_s, len(P)); Pj = P[j]; Rj = R[j]; Nj = j - i_s
-    if design == "uniform8":
-        num = 2.0*sRs + 2.0*KAPPA8*(Tc[j] - Tc[i_s]); b = 2.0
-    else:
-        sqf = np.where(P <= p0, sq, 0.0); sqa = np.where(P > p0, sq, 0.0)
-        Cf = np.concatenate([[0.0], np.cumsum(sqf)])[:-1]
-        Ca = np.concatenate([[0.0], np.cumsum(sqa)])[:-1]
-        num = 3.0*sRs + 2.0*(2.0*(Cf[j] - Cf[i_s]) + 1.5*(Ca[j] - Ca[i_s])); b = 3.0
-    crit = num/np.sqrt(Pj*Rj) + Nj/Pj
-    if not quiet:
-        if design == "uniform8":
-            print(f"state s={state}, design uniform8: b=2, V<=kappa_T=3/sqrt2={KAPPA8:.6f}")
-        else:
-            print(f"state s={state}, design disciplined: free orientations for p<={p0}, "
-                  f"alternating 0/180 beyond; adaptive-K weights 2 / 1.5, b<=3")
-    bad = np.where(crit >= 1.0)[0]
-    if len(bad) == 0:
-        if not quiet: print("criterion holds for every prime q>=s: EMPTY head (terminal state)")
-        return None, 0
-    jj = bad[-1]; q0 = int(Pj[jj]); head = int(jj + 1); nxt = int(Pj[jj+1])
-    if not quiet:
-        print(f"crossover: last-failing prime q0={q0} (value {crit[jj]:.6f}>=1); "
-              f"holds from {nxt} (value {crit[jj+1]:.6f}<1)")
-        print(f"HEAD size = #(primes in [{state},q0]) = {head} triangles")
-    if quiet: return q0, head
-    # Analytic majorant beyond the finite window X. Numerators (state s, unnormalized):
-    #   uniform8:    2*sqrt(Rs) + 2*kappa_T*T_s(q)           -> coeff 2*kappa_T, const 2*sqrt(Rs)
-    #   disciplined: 3*sqrt(Rs) + 3*T_s(q) + 2H_s,
-    #                2H_s <= Cf_s := sum_{s<=p<=p0} sqrt(d_p) -> coeff 3, const 3*sqrt(Rs)+Cf_s
-    # (the +Cf_s term is the worst case of the free-orientation excess; dropping it, as an
-    #  earlier revision did, understates the disciplined majorant by Cf_s/sqrt(q R_<q)).
-    g = 0.5772156649; ell = math.log(1e5); beta = math.exp(-g)*(1-1/ell**2); A1e5 = 2.3355
-    if design == "uniform8":
-        coeff, const = 2.0*KAPPA8, 2.0*sRs
-    else:
-        i0 = int(np.searchsorted(P, p0, side='right'))
-        Cf_s = float(sq[i_s:i0].sum())
-        coeff, const = 3.0, 3.0*sRs + Cf_s
-    def M(q):
-        Lq = math.log(q)
-        return coeff*A1e5/(math.sqrt(beta)*Lq) + const/math.sqrt(q*(beta/Lq)) + (1/Lq)*(1+1.2762/Lq)
-    for q in (1e6, 4e6, 1e7):
-        print(f"  analytic majorant M({int(q)}) = {M(q):.4f}  (<1: {M(q) < 1})")
-    handoff = float(M(X))
-    print(f"  handoff: finite interval window reaches X={X}, M(X)={handoff:.4f}"
-          + ("  OK (majorant covers the tail from X)" if handoff < 1 else
-             "  !! INCREASE --X: majorant does not yet cover the tail at X"))
-    return q0, head
+def tail(design="uniform8", p0=1000, X=10_000_000, state=2, quiet=False):
+    """Rigorous container-state tail certificate. Noncontainer state head sizes
+    are still evaluated by the original builder/independent head certificates."""
+    if state != 2:
+        raise ValueError('tail certificate currently covers state 2 only; '
+                         'do not label other states CERTIFIED from this command')
+    from revised_tail_certificate import certify
+    return certify('triangle', design=design, p0=p0, X1=X)
 
 # ------------------------------------------------------------------ exact geometry
 # rotation entries as (a, b) meaning a + b*sqrt2/2
@@ -313,13 +264,13 @@ def main():
     ap.add_argument("target", nargs="?", default="certify", choices=["tail", "certify"])
     ap.add_argument("--design", default="uniform8", choices=["uniform8", "disciplined"])
     ap.add_argument("--p0", type=int, default=1000)
-    ap.add_argument("--X", type=int, default=4_000_000)
+    ap.add_argument("--X", type=int, default=10_000_000)
     ap.add_argument("--state", type=int, default=2)
     ap.add_argument("--in", dest="infile", default="triangle_head.json")
     ap.add_argument("--prec", type=int, default=100)
     a = ap.parse_args()
     if a.target == "tail":
-        tail(a.design, a.p0, a.X, state=a.state)
+        if not tail(a.design, a.p0, a.X, state=a.state): raise SystemExit(1)
     else:
         certify(a.infile, prec=a.prec)
 

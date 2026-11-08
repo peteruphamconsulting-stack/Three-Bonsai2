@@ -1,4 +1,4 @@
- # Companion code — *A Geometric Sieve of Eratosthenes*
+# Companion code — *A Geometric Sieve of Eratosthenes*
 
 Reproduction code and certified data for the paper
 **"A Geometric Sieve of Eratosthenes: Least-prime-factor densities, perfect packings, and the integers as a point set"** (P. Upham).
@@ -11,7 +11,7 @@ perfect-packing results and generates its figures and empirical data:
   finite head certified in 200-bit interval arithmetic, infinite tail bounded by explicit prime estimates.
 * **Ellipse (§6).** The ellipse of aspect ratio ρ ≈ 0.6296 is perfectly packed by similar ellipses of areas
   *d_p* in two orientations — a 1650-piece certified head (exact rational Perram–Wertheim disjointness
-  witnesses, interval containment) plus the eroded-volume capacity tail, and the ten further certified
+  witnesses, interval containment) plus the **corrected orientation-averaged** eroded-volume capacity tail, and the ten further certified
   *state heads* that carry the recursive integer dissection into elliptical cells.
 * **Triangle (§7).** The isosceles right triangle is perfectly packed by similar triangles of areas *d_p*
   in the eight 45° orientations — a 10906-piece certified head (exact-rational and 100-bit interval
@@ -21,6 +21,35 @@ perfect-packing results and generates its figures and empirical data:
   triangular cells. An exact 15-piece algebraic base, verified symbolically in ℚ(√2,…,√47), anchors the
   head's first pieces.
 * **Staircase (§3).** The staircase limit-angle constant L and θ\* = arctan(e^L) ≈ 56.29°.
+
+### Revised tail verification (November 8, 2026)
+
+The previous ellipse mixed-area coefficient `(rho + 1/rho)/2` was incorrect for
+orthogonally oriented ellipses. The repaired proof uses
+`kappa_star = 2 E(1-rho^4)/(pi*rho)` (complete elliptic integral of the second kind,
+parameter convention) and its orientation average `kappa_bar = (1+kappa_star)/2`.
+The analytic majorant now retains the complete prime-prefix contribution and
+the `N_q/q` prime-count term. The finite window extends to `10,000,000` and is
+checked by outward-rounded 128-bit interval arithmetic.
+
+Two independent user-side runs of the patched scripts returned `STATUS: CERTIFIED`:
+
+| Model | Head retained | Largest post-head criterion (upper endpoint) | Infinite-tail bound (upper endpoint) |
+|---|---|---:|---:|
+| Ellipse, two-orientation average | 1,650 pieces through 13,967 | 0.9769179523 at 14,011 | 0.5108274068 |
+| Triangle, disciplined schedule | 10,906 pieces through 115,363 | 0.9999700506 at 115,399 | 0.6917952459 |
+
+Each run tested `664,579` primes through `10^7` with **no finite post-head
+failure**. The common explicit constants were `K <= 2.063589925` and
+`beta >= 0.557223571`. The ellipse run used the exact decimal
+`rho = 0.6296271949192772` from the existing head; it reported
+`kappa_star ≈ 1.161361468300` and `kappa_bar ≈ 1.080680734150`.
+
+The original geometric head JSON files and figure data are **unchanged**.
+These results certify the **state-2 container tails**. The existing
+state-specific heads should be retained; the recursive state comparisons and
+the rectangle's infinite immature-stock charging invariant remain separate
+manuscript-level proof-audit items.
 
 ---
 
@@ -37,16 +66,17 @@ perfect-packing results and generates its figures and empirical data:
 
 | File | Role |
 |------|------|
-| `ellipse_certify.py` | The rigorous ellipse certifier. `certify` reads a head JSON and proves: area shares equal the exact σ_s(q) (reconstructed from *(state, n)*, never parsed from the file); every pair disjoint by an **exact rational** Perram–Wertheim witness F(λ\*) > 1 evaluated in `Fraction`; every piece contained by adaptive interval subdivision of the support gap. Fail-closed status. `tail` evaluates the placeability criterion, reports the crossover q₀ = 13967 and head size π(q₀) = 1650, and checks the analytic majorant. |
+| `ellipse_certify.py` | The geometric head certifier is unchanged in substance: exact rational Perram–Wertheim pair witnesses and interval containment. Its revised `tail` command calls `revised_tail_certificate.py`, uses the correct orientation-averaged mixed area, and certifies the post-head interval and infinite tail. The existing head ends at 13,967; this is a retained head cutoff, **not** the improved numerical criterion crossover. |
 | `ellipse_build.py` | The head builder: beam search with spatial hashing, Sobol candidate fields, Nelder–Mead refinement gated on the exact margin the certifier will see, checkpoint/resume, and jam repair with escalating backup windows. `--state s` builds the state-*s* heads. Output JSON feeds `ellipse_certify.py` directly. |
 | `ellipse_head_n1650.json` | The certified **container head** (state 2): 1650 pieces, primes 2…13967, exact dyadic centers, orientation pattern, ρ = 0.6296271949192772. |
 | `head_s3.json` … `head_s31.json` | The ten further certified **state heads** of the state-comparison proposition (states 3, 5, 7, 11, 13, 17, 19, 23, 29, 31 with n = 1044, 755, 594, 474, 405, 321, 273, 209, 171, 115). Every state s ≥ 37 is covered by the tail from its first piece, so these eleven heads are exactly what the recursive dissection of ℕ into elliptical cells requires. |
+| `revised_tail_certificate.py` | Shared rigorous 128-bit interval certificate for the ellipse and triangle **container tails**, with a finite prime window through `10^7`, a full Appendix-A analytic majorant, and fail-closed exit status. |
 
 ### Triangle proof (§7)
 
 | File | Role |
 |------|------|
-| `triangle_certify.py` | The rigorous triangle certifier. `certify` reads a head JSON and proves, fail-closed: area shares equal the exact σ_s(q) (reconstructed from *(state, n)*, never parsed); every piece contained by **exact-rational** margins where a contact's radical coefficient vanishes (the intended leg/hypotenuse contacts) and 100-bit `mpmath` interval margins otherwise; every pair disjoint by a **separating-axis witness** among the eight directions *k*·45° (which contain every edge normal). `tail` evaluates the eroded-volume criterion with κ_T = 3/√2, reports the disciplined crossover q₀ = 115363 and head size π(q₀) = 10906, and checks the analytic majorant. |
+| `triangle_certify.py` | The rigorous triangle geometric head certifier is unchanged in substance. Its revised `tail --design disciplined` delegates to `revised_tail_certificate.py`, checking all post-head primes and the complete analytic majorant including `N_q/q`. The existing head ends at 115,363 and retains 10,906 pieces. |
 | `triangle_build.py` | The head builder: corner-anchored greedy over 24 templates (8 orientations × 3 anchor vertices), contact-length (deepest-nestle) scoring, vectorized separating-axis overlap tests with a spatial grid, touch-then-nudge clearance snapped to the 2⁻⁴⁰ dyadic grid, escalating back-off jam repair, checkpoint/resume. `--state s` builds the state-*s* head (target auto-computed from the crossover); `--design disciplined` is the certified schedule. Output JSON feeds `triangle_certify.py` directly. |
 | `run_triangle_states.py` | Drives the whole integer family: for each prime state 2…terminal it builds (via `triangle_build`) and certifies (via `triangle_certify`) one head, reuses any already-`CERTIFIED` head, and writes `states/tri_state_<s>.json` plus `states/manifest.json`. `--only`, `--keep-going`, `--certify-only` for subsets / re-verification. |
 | `triangle_head_n10906.json` | The certified **container head** (state 2): 10906 pieces, primes 2…115363, disciplined schedule, rational-edge frame (`hypotenuse-on-x-axis`). Schema below. |
@@ -88,7 +118,8 @@ Tested with (pin these for exact reproduction of the certificates and the frozen
 `numpy 2.4.4`, `scipy 1.x`, `sympy 1.14.0`, `mpmath 1.3.0`, `shapely 2.1.2` (GEOS 3.x), `matplotlib 3.x`, Python 3.11.
 
 * `mpmath` — interval arithmetic for the rectangle certificates (200-bit), the ellipse containment
-  certification, and the triangle containment margins (`triangle_certify.py`, 100-bit).
+  certification, triangle containment margins (`triangle_certify.py`, 100-bit), and the revised
+  ellipse/triangle tail inequalities (`revised_tail_certificate.py`, 128-bit).
 * `sympy` — exact symbolic computation in ℚ(√2,…,√47) (`triangle_base_exact.py`) and exact prime/density
   bookkeeping for the ellipse and triangle scripts.
 * `shapely` — floating-point polygon geometry (GEOS); used **only** to select packing combinatorics and to
@@ -98,7 +129,7 @@ Tested with (pin these for exact reproduction of the certificates and the frozen
   depends on it).
 * `numpy`, `matplotlib` — sieving, statistics, and figures.
 
-Per script: `rect_exact.py` needs only `numpy` + `mpmath`; `ellipse_certify.py` needs `numpy` + `mpmath` +
+Per script: `revised_tail_certificate.py` needs only `mpmath`; `rect_exact.py` needs only `numpy` + `mpmath`; `ellipse_certify.py` needs `numpy` + `mpmath` +
 `sympy`; `ellipse_build.py` needs `numpy` + `scipy` + `sympy`; `triangle_certify.py` needs `numpy` + `mpmath`
 + `sympy`; `triangle_build.py` needs only `numpy`; `run_triangle_states.py` needs `numpy` + `sympy` (it imports
 `triangle_build` and shells out to `triangle_certify`); `triangle_base_exact.py` needs `numpy` + `sympy` +
@@ -137,8 +168,8 @@ python ellipse_certify.py certify --in ellipse_head_n1650.json
 # Certify any of the ten state heads (states 3..31) the same way:
 python ellipse_certify.py certify --in head_s7.json
 
-# Tail crossover: the placeability criterion holds for every prime q > q0 = 13967
-# (head size pi(q0) = 1650), plus the analytic majorant checks.
+# Revised averaged tail: certified finite window to 10^7 and infinite majorant.
+# The existing 1650-piece head through p=13967 is retained unchanged.
 python ellipse_certify.py tail
 ```
 
@@ -146,6 +177,8 @@ Expected certify output: `STATUS: CERTIFIED` with all pairs disjoint (exact PW w
 rigorous distance pruning for far pairs) and a certified negative max support gap. The container head
 covers area Σ_{p≤13967} d_p = 1 − R_{<13997}; together with the `tail` crossover this is the
 computer-assisted half of the ellipse theorem.
+The certified post-head criterion has maximum upper endpoint `0.9769179523` at
+prime `14011`; the analytic upper bound at `10^7` is `0.5108274068`.
 
 ### Triangle (§7)
 
@@ -154,8 +187,8 @@ computer-assisted half of the ellipse theorem.
 # 100-bit interval containment margins, separating-axis disjointness witnesses.
 python triangle_certify.py certify --in triangle_head_n10906.json --design disciplined
 
-# Tail crossover: the eroded-volume criterion (kappa_T = 3/sqrt2) holds for every
-# prime q > q0 = 115363 (head size pi(q0) = 10906), plus the analytic majorant.
+# Revised disciplined tail: 128-bit finite interval window to 10^7 and
+# complete analytic majorant (including the prime-count term N_q/q).
 python triangle_certify.py tail --design disciplined
 
 # Build + certify the whole 45-state integer family in one pass (writes states/).
@@ -167,8 +200,11 @@ python run_triangle_states.py --design disciplined --p0 1000 --outdir states
 Expected certify output: `STATUS: CERTIFIED` with all 98154 containment margins ≥ 0 (11 exact-zero leg
 contacts), all pairs disjoint by separating-axis witnesses, least certified gap ≈ 3.5×10⁻¹⁸. Expected family
 output: `45/45 states CERTIFIED, 118593 pieces`, `FAMILY CERTIFIED`, least gap over the family ≈ 4.2×10⁻¹⁸.
-Together with the `tail` crossover these are the computer-assisted half of the unconditional triangle theorem
-and its integer corollary.
+Together with the `tail` certificate, these supply the computational inputs for
+the state-2 triangle packing theorem. The revised certified post-head maximum upper endpoint is
+`0.9999700506` at prime `115399`; the analytic upper bound at `10^7` is
+`0.6917952459`. The recursive integer corollary additionally uses the state-head
+family and its analytic state comparisons.
 
 ```bash
 # Optional stricter check: the exact algebraic base (first 15 primes) in Q(sqrt2..sqrt47).
@@ -176,7 +212,7 @@ python triangle_base_exact.py                       # float greedy fixes the com
 python triangle_base_exact.py --frozen              # replay from base_combinatorics.json (no greedy/GEOS)
 ```
 
-Expected: `CERTIFIED` with `135/135`, `105/105`, free area = R_{<50}; `--frozen` gives the same result from
+Expected: `CERTIFIED` with `135/135`, `105/105`, free area = R_{<53}; `--frozen` gives the same result from
 the stored record alone.
 
 ### Staircase constant (§3)
@@ -221,6 +257,7 @@ of the same packing is the `rect_packing` figure.
 ```
 python ellipse_certify.py certify [--in ellipse_head_n1650.json] [--cells 96]
 python ellipse_certify.py tail    [--rho 0.6296271949192772]
+python revised_tail_certificate.py ellipse [--X1 10000000] [--prec 128]
 ```
 
 * **`certify`** — loads a head JSON, treating the stored binary64 centers as **exact dyadic rationals** and
@@ -230,9 +267,14 @@ python ellipse_certify.py tail    [--rho 0.6296271949192772]
     a rational witness λ\* (far pairs pruned by a rigorous center-distance bound);
   * every piece contained by adaptive interval bisection (`mpmath.iv`) of the support gap in angle — a
     cell is accepted only when its interval upper bound is < 0.
-* **`tail`** — the placeability criterion 2κ(1+T(q))/√(qR_{<q}) + N_q/q < 1 with κ = (ρ+1/ρ)/2; reports the
-  crossover q₀ = 13967 (so the head is the first π(q₀) = 1650 primes) and evaluates the analytic majorant
-  at 3·10⁴, 10⁵, 2·10⁵.
+* **`tail`** — checks the corrected averaged criterion
+  `2*kappa_bar*(1+T_strict(q))/sqrt(q*R_<q)+N_q/q < 1`, where
+  `T_strict(q)=sum_{p<q} sqrt(d_p)`,
+  `kappa_star=2*E(1-rho^4)/(pi*rho)`, and `kappa_bar=(1+kappa_star)/2`.
+  The elliptic integral is enclosed by a 240-term interval series. The finite
+  prime window ends at `10^7` and the infinite tail uses the full, decreasing
+  Appendix-A majorant. The previous claimed analytic evaluation at `3*10^4`
+  is superseded. The original geometric head through 13,967 is retained.
 
 The heads were discovered by `ellipse_build.py`:
 
@@ -266,7 +308,8 @@ recent pieces with escalating window sizes. `--state s` builds the state-*s* hea
 
 ```
 python triangle_certify.py certify [--in triangle_head_n10906.json] [--design disciplined] [--prec 100] [--state 2]
-python triangle_certify.py tail    [--design disciplined] [--p0 1000] [--X 4000000] [--state 2]
+python triangle_certify.py tail    [--design disciplined] [--p0 1000] [--X 10000000] [--state 2]
+python revised_tail_certificate.py triangle [--X1 10000000] [--prec 128]
 python triangle_build.py [--state 2] [--design disciplined] [--p0 1000] [--target-n 0] [--out FILE] \
     [--checkpoint FILE] [--ckpt-every 500] [--resume FILE] [--seed 7] [--time-cap SECS]
 python run_triangle_states.py [--design disciplined] [--p0 1000] [--outdir states] \
@@ -283,9 +326,12 @@ python run_triangle_states.py [--design disciplined] [--p0 1000] [--outdir state
   * every pair disjoint by a separating-axis witness among the eight directions *k*·45° — these contain
     every edge normal of every piece — a certified positive gap being the witness (far pairs pruned by a
     padded bounding box), in exact parallel to the ellipse's rational Perram–Wertheim witnesses.
-* **`tail`** — the eroded-volume criterion (*b* + 2 Σ √d_p·V_p)/√(q·R_{<q}) + N_q/q < 1 with the mixed-area
-  table *V_p* and κ_T = 3/√2; reports the disciplined crossover q₀ = 115363 (head π(q₀) = 10906) and checks
-  the analytic majorant. `--state s` runs the criterion in a state-*s* cell (relative shares σ_s(q)).
+* **`tail`** — the corrected disciplined eroded-volume criterion with the mixed-area
+  table *V_p* and κ_T = 3/√2. It retains the existing head through 115,363,
+  rigorously checks every later prime through `10^7`, and uses the complete
+  analytic bound **including** `N_q/q`. The revised command certifies **state 2**;
+  `--state s` for `s>2` is not presently supported by the new tail verifier and
+  fails explicitly rather than displaying an unsupported certificate.
 * **`build`** — the numerical **discovery** tool: corner-anchored greedy over the 24 templates, deepest-nestle
   scoring, separating-axis overlap with a spatial grid, touch-then-nudge clearance snapped to the 2⁻⁴⁰ grid,
   escalating jam repair, checkpoint/resume. State 2 is seeded with the exact canonical half-split (*p* = 2);

@@ -8,9 +8,9 @@ orientations (0 or 90 deg). Working in the coordinate frame where the container 
 semi-axes (a,b)=(1,rho), a piece of area-share d_i has shape matrix diag(d_i, d_i*rho^2)
 at 0 deg (axes swapped at 90 deg) -- RATIONAL, since d_i and rho are exact.
 
-    tail     kappa=(rho+1/rho)/2 ; the placeability criterion 2 kappa (1+T(q))/sqrt(q R_<q)
-             + N_q/q < 1 (the closure-law ratio, a container term, a count term); reports the
-             crossover q0 and head size pi(q0).
+    tail     runs revised_tail_certificate.py: exact orthogonal mixed-area
+             coefficient, orientation-averaged criterion, outward-rounded
+             prime window through 10^7, and explicit analytic majorant.
     certify  reads a builder head JSON and proves, rigorously:
              * area shares == d_p exactly;
              * every pair DISJOINT, by an EXACT rational Perram-Wertheim witness
@@ -32,29 +32,9 @@ from fractions import Fraction as Fr
 import numpy as np, sympy
 
 # ------------------------------------------------------------------ tail
-def kappa_of(rho): return 0.5*(rho + 1.0/rho)
-
-def tail(rho, X=300000):
-    from math import sqrt, log, exp
-    kap = kappa_of(rho); print(f"rho={rho:.6f}  kappa=(rho+1/rho)/2={kap:.6f}")
-    R=Fr(1); T=0.0; N=0; last=None; store={}
-    for p in sympy.primerange(2, X):
-        p=int(p)
-        val = 2*kap*(1.0+T)/sqrt(p*float(R)) + N/p       # container counts as a 'piece of area 1'
-        store[p]=val
-        if val>=1: last=p
-        T+=sqrt(float(R)/p); R*=Fr(p-1,p); N+=1
-    nextp=int(sympy.nextprime(last)); head=int(sympy.primepi(last))
-    print(f"crossover: last-failing prime q0={last} (value {store[last]:.6f}>1); "
-          f"holds from {nextp} (value {store[nextp]:.6f}<1)")
-    print(f"HEAD size = pi(q0) = {head} ellipses")
-    # analytic majorant with kappa (Appendix-A constants)
-    g=0.5772156649; ell=log(1e5); beta=exp(-g)*(1-1/ell**2); A1e5=2.3355
-    def M(q):
-        L=log(q); return 2*kap*A1e5/(sqrt(beta)*L)+2*kap/sqrt(q*(beta/L))+(1/L)*(1+1.2762/L)
-    for q in (3e4,1e5,2e5):
-        print(f"  analytic majorant M({int(q)})={M(q):.4f} (<1:{M(q)<1})")
-    return last, head
+def tail(rho, X=10_000_000):
+    from revised_tail_certificate import certify
+    return certify('ellipse', rho=str(rho), X1=X)
 
 # ------------------------------------------------------------------ head parse
 def state_shares(n, s=2):
@@ -153,12 +133,13 @@ def certify_contained(C, ori, shares, rho, cells=64, prec=120, min_width=1e-9):
 def main():
     ap=argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("target", nargs="?", default="certify", choices=["tail","certify"])
-    ap.add_argument("--rho", type=float, default=0.6296271949192772)
+    ap.add_argument("--rho", type=str, default="0.6296271949192772")
     ap.add_argument("--in", dest="infile", default="ellipse_head_n1650.json")
     ap.add_argument("--cells", type=int, default=96)
     a=ap.parse_args()
     if a.target=="tail":
-        tail(a.rho); return
+        if not tail(a.rho): raise SystemExit(1)
+        return
     C,rho,ori,shares,s,primes=load_head(a.infile); n=len(C)
     # areas: shares are reconstructed exactly as sigma_s(q); confirm the built head used them
     # by matching the stored float shares (if present) to within float tolerance.
