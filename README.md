@@ -7,12 +7,14 @@ For each prime *p*, let *d_p* be the natural density of the integers whose least
 (so *d_p* = (1/p)∏_{q<p}(1−1/q) and Σ_p *d_p* = 1). This code certifies the paper's three unconditional
 perfect-packing results and generates its figures and empirical data:
 
-* **Rectangle (§5).** The aspect-√2 rectangle is perfectly packed by similar rectangles of areas *d_p* —
-  finite head certified in 200-bit interval arithmetic, infinite tail bounded by explicit prime estimates.
+* **Rectangle (§5).** The complete feasible interval for axis-parallel packings by similar rectangles is
+  **1/√2 + 1/√6 ≤ r ≤ √6**. Sixteen interval-certified guillotine schedules of 1,282 pieces each cover
+  the entire closed parameter interval; an arrangement-independent tail criterion places every later piece.
+  Moreover every shifted prime state *s* ≥ 3 admits a perfect square packing, furnishing the recursive states.
 * **Ellipse (§6).** The ellipse of aspect ratio ρ ≈ 0.6296 is perfectly packed by similar ellipses of areas
   *d_p* in two orientations — a 1650-piece certified head (exact rational Perram–Wertheim disjointness
   witnesses, interval containment) plus the **corrected orientation-averaged** eroded-volume capacity tail, and the ten further certified
-  *state heads* that carry the recursive integer dissection into elliptical cells.
+  *state-head files* (nine required beyond state 2, plus the now-redundant state-31 certificate) that carry the recursive integer dissection into elliptical cells.
 * **Triangle (§7).** The isosceles right triangle is perfectly packed by similar triangles of areas *d_p*
   in the eight 45° orientations — a 10906-piece certified head (exact-rational and 100-bit interval
   containment margins, separating-axis disjointness witnesses on a rational-edge frame) plus the same
@@ -22,7 +24,14 @@ perfect-packing results and generates its figures and empirical data:
   head's first pieces.
 * **Staircase (§3).** The staircase limit-angle constant L and θ\* = arctan(e^L) ≈ 56.29°.
 
-### Revised tail verification (November 8, 2026)
+### Revised certification (November 8–9, 2026)
+
+The rectangular proof now uses `rectangle_full_interval_certificate.py` instead of the
+earlier reserve/immature-stock argument. Running the driver reproduced a **CERTIFIED** complete interval:
+16 schedules, both exact algebraic endpoint contacts (2,563 strict remaining inequalities per endpoint),
+maximum finite-tail upper value `0.9998320673924572` at prime `10487`, infinite majorant
+`0.7616246752362302`, and the aligned-square state comparison for every prime state *s* ≥ 3.
+It writes `rectangle_full_interval_certificate.json`.
 
 The previous ellipse mixed-area coefficient `(rho + 1/rho)/2` was incorrect for
 orthogonally oriented ellipses. The repaired proof uses
@@ -46,10 +55,12 @@ failure**. The common explicit constants were `K <= 2.063589925` and
 `kappa_star ≈ 1.161361468300` and `kappa_bar ≈ 1.080680734150`.
 
 The original geometric head JSON files and figure data are **unchanged**.
-These results certify the **state-2 container tails**. The existing
-state-specific heads should be retained; the recursive state comparisons and
-the rectangle's infinite immature-stock charging invariant remain separate
-manuscript-level proof-audit items.
+On November 9 the 1,650-piece ellipse container head was separately reverified on the author's Mac:
+all `1,360,425` pairs passed (5,771 exact rational Perram–Wertheim witnesses),
+the minimum exact PW slack was `0.000170927`, and the maximal containment support gap
+was `−1.86368e−06`, strictly negative. The revised container-tail certificates are separate
+from the existing geometric head checks. The current averaged ellipse state comparison makes
+state 31 head-free; the older state-31 JSON remains valid but is no longer needed in the proof.
 
 ---
 
@@ -59,8 +70,13 @@ manuscript-level proof-audit items.
 
 | File | Role |
 |------|------|
-| `rect_exact.py` | The similar-rectangle model: guillotine scheduler, immature-stock measurement, and the two rigorous certificates behind the rectangle theorem (`head`, `tail`; the `tail` finite windows and analytic-tail constants run in `mpmath` interval arithmetic, and `head` derives its `CERTIFIED` status from the recorded invariants rather than asserting it). Also `ledger` and `backstop` float exploration runs. |
-| `head_certificate_sqrt2.json` | The 5133-prime interval certificate for the √2 head, pre-generated (schema below). |
+| `rectangle_full_interval_certificate.py` | **Current main theorem driver:** certifies 16 parameter-interval schedules, both exact aspect-ratio endpoints, the mixed-orientation uniform tail, and every shifted square state; creates the summary JSON. |
+| `rectangle_aspect_path_range.py` | Reconstructs fixed guillotine schedules and certifies all fit inequalities across intervals in *r*, including exact endpoint contacts. |
+| `rectangle_aspect_sweep.py` | Prime enumeration and deterministic finite-head scheduling support. |
+| `rectangle_aspect_recursive_certificate.py` | Verifies the aligned-square state heads and head-free state comparison, invoked by the main driver. |
+| `rectangle_aspect_head_certificate.py` | Interval verifier used by the recursive-state driver. |
+| `rectangle_full_interval_certificate.json` | Output of the current sharp-interval theorem driver (16 interval records, schedule hashes, and tail bounds). Regenerate with the main command below. |
+| `rect_exact.py`, `head_certificate_sqrt2.json` | **Legacy √2-specific construction:** valid earlier guillotine/reserve experiment, retained for reproducibility and figures, but not the proof of the current sharp aspect-ratio theorem. |
 
 ### Ellipse proof (§6)
 
@@ -69,7 +85,7 @@ manuscript-level proof-audit items.
 | `ellipse_certify.py` | The geometric head certifier is unchanged in substance: exact rational Perram–Wertheim pair witnesses and interval containment. Its revised `tail` command calls `revised_tail_certificate.py`, uses the correct orientation-averaged mixed area, and certifies the post-head interval and infinite tail. The existing head ends at 13,967; this is a retained head cutoff, **not** the improved numerical criterion crossover. |
 | `ellipse_build.py` | The head builder: beam search with spatial hashing, Sobol candidate fields, Nelder–Mead refinement gated on the exact margin the certifier will see, checkpoint/resume, and jam repair with escalating backup windows. `--state s` builds the state-*s* heads. Output JSON feeds `ellipse_certify.py` directly. |
 | `ellipse_head_n1650.json` | The certified **container head** (state 2): 1650 pieces, primes 2…13967, exact dyadic centers, orientation pattern, ρ = 0.6296271949192772. |
-| `head_s3.json` … `head_s31.json` | The ten further certified **state heads** of the state-comparison proposition (states 3, 5, 7, 11, 13, 17, 19, 23, 29, 31 with n = 1044, 755, 594, 474, 405, 321, 273, 209, 171, 115). Every state s ≥ 37 is covered by the tail from its first piece, so these eleven heads are exactly what the recursive dissection of ℕ into elliptical cells requires. |
+| `head_s3.json` … `head_s31.json` | Ten additional existing certified **state-head files** (states 3, 5, 7, 11, 13, 17, 19, 23, 29, 31; sizes 1044, 755, 594, 474, 405, 321, 273, 209, 171, 115). Under the revised averaged criterion, only states 3 through 29 need these nine heads; **every state s ≥ 31 is head-free**. Thus ten heads total, including the container's state-2 head, suffice. The state-31 file may be retained as extra verification data. |
 | `revised_tail_certificate.py` | Shared rigorous 128-bit interval certificate for the ellipse and triangle **container tails**, with a finite prime window through `10^7`, a full Appendix-A analytic majorant, and fail-closed exit status. |
 
 ### Triangle proof (§7)
@@ -143,20 +159,25 @@ Per script: `revised_tail_certificate.py` needs only `mpmath`; `rect_exact.py` n
 ### Rectangle (§5)
 
 ```bash
-# Finite head: place the first 5133 primes (q <= 5*10^4) in the sqrt2 rectangle,
-# certify every placement fits in 200-bit interval arithmetic, and dump the full record.
-python rect_exact.py head --q0 50000 --prec 200 --dump head_certificate_sqrt2.json
-
-# Analytic tail: verify the immature-stock ratio rho(q) < 1 for all q > q0
-# (finite windows in interval arithmetic + explicit analytic majorant; Appendix A).
-python rect_exact.py tail
+# Current sharp interval theorem: run from the folder containing the five
+# rectangle_aspect*.py / rectangle_full_interval_certificate.py scripts.
+python3 rectangle_full_interval_certificate.py
 ```
 
-Expected head summary: `CERTIFIED`, `placements certified: 5133` (all primes 2…49999; piece 2 is the
-implicit left-half split), reserve hit once (at *p* = 3) with slack 0.092, 5135 fringe rectangles, reserve
-aspect √2 to the interval, reserve+fringe area = R_{<q₀} exactly, minimum fit margin 2.4×10⁻³.
-Expected tail summary: `CERTIFIED`, ρ(q) ≤ 0.923 < 1−1/q for every prime q > q₀ = 5·10⁴.
-Together these are the two halves of the unconditional, computer-assisted rectangle theorem.
+Expected concluding lines:
+
+```text
+CLOSED-INTERVAL COVER: CERTIFIED (16 schedules plus two exact contacts)
+UNIFORM MIXED-ORIENTATION TAIL: CERTIFIED
+ALL SHIFTED STATES s>=3: CERTIFIED (universal aligned-square family)
+OVERALL: CERTIFIED COMPLETE ASPECT INTERVAL
+Saved rectangle_full_interval_certificate.json
+```
+
+The generated JSON, the five scripts, and their exact version information belong in the archive.
+For historical comparison, the earlier √2-only proof may still be reproduced with
+`python3 rect_exact.py head --q0 50000 --prec 200 --dump head_certificate_sqrt2.json`
+and `python3 rect_exact.py tail`. Those legacy commands are **not prerequisites** for the sharp theorem.
 
 ### Ellipse (§6)
 
@@ -165,7 +186,8 @@ Together these are the two halves of the unconditional, computer-assisted rectan
 # Perram-Wertheim disjointness for every close pair, interval containment for every piece.
 python ellipse_certify.py certify --in ellipse_head_n1650.json
 
-# Certify any of the ten state heads (states 3..31) the same way:
+# Certify an existing shifted-state head (nine needed for states 3..29;
+# the state-31 file is optional supplementary data):
 python ellipse_certify.py certify --in head_s7.json
 
 # Revised averaged tail: certified finite window to 10^7 and infinite majorant.
@@ -174,7 +196,9 @@ python ellipse_certify.py tail
 ```
 
 Expected certify output: `STATUS: CERTIFIED` with all pairs disjoint (exact PW witnesses for close pairs,
-rigorous distance pruning for far pairs) and a certified negative max support gap. The container head
+rigorous distance pruning for far pairs) and a certified negative max support gap. The verified state-2 head
+has `1,360,425` disjoint pairs, exact PW minimum slack `0.000170927`, and containment maximum support gap
+`−1.86368e−06`. The container head
 covers area Σ_{p≤13967} d_p = 1 − R_{<13997}; together with the `tail` crossover this is the
 computer-assisted half of the ellipse theorem.
 The certified post-head criterion has maximum upper endpoint `0.9769179523` at
@@ -226,7 +250,11 @@ Expected: `L = 0.4047892180`, `kappa = 1.4989865074`, `theta* = 56.2920568°`, `
 
 ---
 
-## `rect_exact.py` — the rectangle theorem
+## `rect_exact.py` — legacy √2-specific rectangle method
+
+The following commands reproduce the earlier reserve/immature-stock construction,
+retained for research provenance and the original figure. The current rectangle theorem
+instead uses `rectangle_full_interval_certificate.py` as described in Quick start.
 
 ```
 python rect_exact.py head     [--q0 50000] [--prec 200] [--reserve-frac 0.5] [--dump FILE]
@@ -247,8 +275,9 @@ python rect_exact.py backstop [--nmax N]          # reserve-backstop scheduler r
   majorant of Appendix A, whose constants and final assembly are themselves evaluated in interval
   arithmetic. Prints the crossover (last q with ρ ≥ 1) and confirms it lies below q₀.
 
-The certificate is a comparison of side **lengths**, so it is position-independent; a positioned rendering
-of the same packing is the `rect_packing` figure.
+The historical certificate compares side **lengths**; a positioned rendering of that
+particular √2 packing is the `rect_packing` figure. Its reserve and maturity conditions are
+not assumptions of the current arrangement-independent infinite continuation.
 
 ---
 
@@ -468,12 +497,13 @@ Every `fit_margin ≥ 0` is a rigorous interval-arithmetic certificate that the 
 |--------------|---------|
 | Staircase limit angle (§3, Theorem `thm:angle`) | `python staircase_constant.py` |
 | Self-similar dissection figures (§4, Prop. `prop:markov`) | `python rect_recursion_figure.py` and `python ellipse_recursion_figure.py …` |
-| √2 rectangle packing (§5, Theorem `thm:rect`), finite head | `python rect_exact.py head --q0 50000 --dump head_certificate_sqrt2.json` |
-| √2 rectangle packing, analytic tail (Lemma `lem:explicit` / App. A) | `python rect_exact.py tail` |
+| Sharp rectangle aspect-ratio classification (§5, Theorem `thm:rect`), sixteen heads and uniform tail | `python3 rectangle_full_interval_certificate.py` |
+| Shifted square-state continuation (§5) | Invoked automatically by `rectangle_full_interval_certificate.py` (or `python3 rectangle_aspect_recursive_certificate.py --r 1 --square-states`) |
+| Earlier √2-only reserve construction (legacy) | `python3 rect_exact.py head --q0 50000 --dump head_certificate_sqrt2.json` and `python3 rect_exact.py tail` |
 | Ellipse certified head (§6, Theorem `thm:ellhead`) | `python ellipse_certify.py certify --in ellipse_head_n1650.json` |
 | Ellipse tail crossover (Lemma `lem:ellthresh`, Theorem `thm:ellipse`) | `python ellipse_certify.py tail` |
-| Eleven state heads (§6, Prop. `prop:states`) | `python ellipse_certify.py certify --in head_sN.json` for N ∈ {3,5,7,11,13,17,19,23,29,31} |
-| Integers in elliptical cells (§6, Theorem `thm:ellintegers`) | the eleven certified heads + `python ellipse_recursion_figure.py …` |
+| Required ellipse state heads (§6, Prop. `prop:states`) | `python ellipse_certify.py certify --in head_sN.json` for N ∈ {3,5,7,11,13,17,19,23,29}; state 31 is head-free |
+| Integers in elliptical cells (§6, Theorem `thm:ellintegers`) | state-2 head plus nine required shifted-state heads; `python ellipse_recursion_figure.py …` for illustration |
 | Triangle certified head (§7, Theorem `thm:trihead`) | `python triangle_certify.py certify --in triangle_head_n10906.json --design disciplined` |
 | Triangle tail crossover (Prop. `prop:tricross`, Theorem `thm:tripack`) | `python triangle_certify.py tail --design disciplined` |
 | 45 state heads (§7, Prop. `prop:tristates`) | `python run_triangle_states.py --design disciplined --outdir states` |
@@ -490,10 +520,13 @@ Every `fit_margin ≥ 0` is a rigorous interval-arithmetic certificate that the 
 If you use this code, please cite the paper. This paper is archived at Zenodo:
 [https://doi.org/10.5281/zenodo.21283480](https://doi.org/10.5281/zenodo.21283480) (DOI `10.5281/zenodo.21283480`).
 
-The certificates `head_certificate_sqrt2.json`, `ellipse_head_n1650.json` and the ten state heads
-`head_s3.json`–`head_s31.json`, and `triangle_head_n10906.json` with the 45 state heads under `states/`
-(and their `manifest.json`), together with the finite-window interval evaluations, are the archival record
-behind the paper's three computer-assisted theorems.
+The principal rectangular archival input is `rectangle_full_interval_certificate.json`
+together with its five Python verification scripts. The earlier `head_certificate_sqrt2.json`
+is retained as legacy documentation. The ellipse archive contains `ellipse_head_n1650.json`
+and `head_s3.json`–`head_s31.json` (with `head_s31.json` now optional for the theorem).
+The triangle archive contains `triangle_head_n10906.json` and 45 state heads under `states/`
+with their `manifest.json`. These data, the revised tail scripts, and the finite-window
+interval evaluations support the three computer-assisted packing theorems.
 
 ## License
 

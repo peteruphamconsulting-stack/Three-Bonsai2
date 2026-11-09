@@ -1,0 +1,146 @@
+{
+  "status": "CERTIFIED complete interval",
+  "head_pieces": 1282,
+  "head_last_prime": 10477,
+  "schedules": [
+    {
+      "sample": "1.11841332",
+      "pair": "RR",
+      "lo": "1.115355072768824",
+      "hi": "1.1184136322741587",
+      "sha256_choices": "fd4949a9c97b7795b416a82132c01c34cc3cbeb6bde940fc4720f495efa4a976",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.118418",
+      "pair": "RR",
+      "lo": "1.118413350922451",
+      "hi": "1.1184188593883522",
+      "sha256_choices": "adbfcd9f771f5d3e9d189d84f2ece66d0b82794a5a3f55a28b548a1aaf9c6910",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.11856",
+      "pair": "RR",
+      "lo": "1.118417047381803",
+      "hi": "1.1185600348406466",
+      "sha256_choices": "241d8ab052993dce7d7f8b5c4f8a7742a895d7d20afe714ab7bc46e3122447fd",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.11887",
+      "pair": "RR",
+      "lo": "1.1185592503376223",
+      "hi": "1.1188701534592733",
+      "sha256_choices": "9b7f66bfa77cd2b206a757b04532a410fe2cc24930bb24f0ce17000b01687f54",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.1189",
+      "pair": "RR",
+      "lo": "1.1188676058356002",
+      "hi": "1.1189002044159666",
+      "sha256_choices": "eb418d391acdf6670fa2260f46f043cc3c83bbbb05422c7c8869ed92578af202",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.119",
+      "pair": "RR",
+      "lo": "1.1188950923331675",
+      "hi": "1.1190003056798623",
+      "sha256_choices": "5bb5985f6ab52f6ba19f4b8f05ecabf6cb9bfc261d26fdd8e7288626d2e38a90",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.18",
+      "pair": "RR",
+      "lo": "1.1189747575455269",
+      "hi": "1.1800000331123996",
+      "sha256_choices": "5af527c33092aafb4075e9b3969096f3d9696e6273bcfbb3259b7ee1c4cc154b",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.2",
+      "pair": "RR",
+      "lo": "1.1392503213784804",
+      "hi": "1.200000790009294",
+      "sha256_choices": "b11653a099b7926bdc7af57b98e2d76c376e27a01a7e03c0d4e1be650afee4f1",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.3",
+      "pair": "RA",
+      "lo": "1.1949383002376328",
+      "hi": "1.3000004159472578",
+      "sha256_choices": "683447db31b58488f10a32faa0aca4c76ca88c067a125f1351ee77d2977a09f3",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.38",
+      "pair": "RA",
+      "lo": "1.2879348506559525",
+      "hi": "1.3800001851295378",
+      "sha256_choices": "d016437963df96ec0cd3e4604da2c45dbe5b11f1f86423db9b624f08496bb288",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.4",
+      "pair": "RA",
+      "lo": "1.3230547456301216",
+      "hi": "1.4000000370786296",
+      "sha256_choices": "477c804ae67c9ee448e652b7c82563463fb27fddff26a535b75a566cf46896ae",
+      "pieces": 1282
+    },
+    {
+      "sample": "1.65",
+      "pair": "AR",
+      "lo": "1.3938468517673557",
+      "hi": "1.6500038046014698",
+      "sha256_choices": "d71db1e361bffb197c76218fb15fb529c4574a4f4fae6766962327978e5d057f",
+      "pieces": 1282
+    },
+    {
+      "sample": "2.0",
+      "pair": "AR",
+      "lo": "1.6493911180752268",
+      "hi": "2.000006427793775",
+      "sha256_choices": "e84e3ab6a7b3f035c0dc4fc351711482725f9cc51b2094be6755504757e2e64a",
+      "pieces": 1282
+    },
+    {
+      "sample": "2.02",
+      "pair": "AR",
+      "lo": "1.6622960078570086",
+      "hi": "2.0200000824982425",
+      "sha256_choices": "e1e717ca88a65f8ef5a0bc86444ec2d1b04c3c66fdd18c4a61e4ab245453e6a3",
+      "pieces": 1282
+    },
+    {
+      "sample": "2.4",
+      "pair": "AR",
+      "lo": "2.0133147558039446",
+      "hi": "2.4000025230142628",
+      "sha256_choices": "bd1b815a2df6750d2d20606ccfae5e9633af39fe7876421a4e79e1baf7db18c5",
+      "pieces": 1282
+    },
+    {
+      "sample": "2.44948",
+      "pair": "AR",
+      "lo": "2.035458526478761",
+      "hi": "2.4494897403336884",
+      "sha256_choices": "5a58c2d23c13ce2c27a0bb654a2d53a76365404bd8a19ec204d88ef471eb9334",
+      "pieces": 1282
+    }
+  ],
+  "tail": {
+    "finite_primes_checked": 3852,
+    "max_finite_upper": 0.9998320673924572,
+    "max_finite_at_prime": 10487,
+    "infinite_majorant_upper": 0.7616246752362302
+  },
+  "universal_states": "CERTIFIED",
+  "aspect_interval": [
+    "1/sqrt(2)+1/sqrt(6)",
+    "sqrt(6)"
+  ]
+}
