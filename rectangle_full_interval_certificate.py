@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Finite-cover certificate for the COMPLETE allowable aspect-ratio interval.
 
-Run without flags. Requires mpmath and the two local helper scripts:
-rectangle_aspect_path_range.py and rectangle_aspect_recursive_certificate.py.
+Run without flags. Requires mpmath and the local rectangle_aspect helpers.
 All 16 head schedules pack the first 1282 primes (through p=10477);
 every piece after p=3 is aligned with the container. For each schedule,
 160-bit interval inequalities certify an entire r-interval, not one r.
 Exact endpoint contact identities are handled algebraically.
+Every post-head prime through 10^7 is evaluated in outward-rounded interval
+arithmetic. The infinite range uses the Appendix-A rho bound and explicit
+Rosser--Schoenfeld/Dusart estimates at 10^7.
 """
 import json
 import math
@@ -20,6 +22,7 @@ from rectangle_aspect_sweep import primes_through_count
 
 COUNT=1282
 LAST_HEAD_PRIME=10477
+X1=10_000_000
 SCHEDULES=[
     ('1.11841332','RR'),
     ('1.118418','RR'),
@@ -40,35 +43,65 @@ SCHEDULES=[
 ]
 
 
+def primes_up_to(n):
+    """Exact integer sieve; no prime-density approximation in the finite window."""
+    sieve=bytearray(b'\x01')*(n+1)
+    sieve[0:2]=b'\x00\x00'
+    for p in range(2,math.isqrt(n)+1):
+        if sieve[p]:
+            sieve[p*p:n+1:p]=b'\x00'*((n-p*p)//p+1)
+    return (p for p in range(2,n+1) if sieve[p])
+
+
 def certify_uniform_mixed_tail():
     iv.prec=160
     half=1/iv.sqrt(iv.mpf(2))
     third=1/iv.sqrt(iv.mpf(6))
     cmax=iv.sqrt(iv.mpf(6))+1/iv.sqrt(iv.mpf(6))
     excess=(cmax-2)*(half+third)
-    P=[p for p in primes_through_count(5200) if p<=50021]
-    assert P[COUNT-1]==LAST_HEAD_PRIME and P[-1]==50021
     R,T=iv.mpf(1),iv.mpf(0)
     maximum=(-1,None)
+    maximum_late=(-1,None)
     checked=0
-    for j,p in enumerate(P):
+    prime_total=0
+    for j,p in enumerate(primes_up_to(X1)):
+        if j==COUNT-1 and p!=LAST_HEAD_PRIME:
+            raise AssertionError('finite-head prime cutoff does not match')
         if p>LAST_HEAD_PRIME:
             B=(2+2*T+excess)/iv.sqrt(p*R)+iv.mpf(j-1)/p
             if not (B.b<iv.mpf(1).a):
                 raise AssertionError(f'uniform mixed tail failed at {p}: {B}')
             if float(B.b)>maximum[0]:maximum=(float(B.b),p)
+            if p>50021 and float(B.b)>maximum_late[0]:
+                maximum_late=(float(B.b),p)
             checked+=1
         T+=iv.sqrt(R/p)
         R*=iv.mpf(p-1)/p
-    # For q>50000 use the existing arithmetic envelope H<=0.923,
-    # 1/sqrt(qR)<0.021 and N/q<0.104. The factor of 2/3 matches 2*T.
-    analytic=(iv.mpf(2)/3)*iv.mpf('0.923')+(
+        prime_total=j+1
+    if prime_total!=664579:
+        raise AssertionError(f'unexpected pi(10^7)={prime_total}')
+    # For q>=10^7, Appendix A proves rho(q)=(3*T_inclusive+sqrt(2))
+    # /sqrt(q*R_<q)<0.614. RS gives R_<q>=M(q-1)>=beta/log(q)
+    # with conservative beta evaluated at Q1=10^5. The latter two
+    # decreasing bounds are evaluated at X1 in outward-rounded arithmetic.
+    L=iv.log(iv.mpf(X1))
+    L0=iv.log(iv.mpf(100000))
+    beta=iv.exp(-iv.euler)*(1-1/L0**2)
+    inv_sqrt=iv.sqrt(L/(beta*X1))
+    count_bound=(1+iv.mpf('1.2762')/L)/L
+    analytic=(iv.mpf(2)/3)*iv.mpf('0.614')+(
         2+excess-(iv.mpf(2)/3)*iv.sqrt(iv.mpf(2))
-    )*iv.mpf('0.021')+iv.mpf('0.104')
+    )*inv_sqrt+count_bound
     if not (analytic.b<iv.mpf(1).a):
         raise AssertionError(f'infinite analytic majorant failed: {analytic}')
     return {'finite_primes_checked':checked,'max_finite_upper':maximum[0],
             'max_finite_at_prime':maximum[1],
+            'post_50021_max_upper':maximum_late[0],
+            'post_50021_max_at_prime':maximum_late[1],
+            'window_endpoint':X1,'all_primes_in_window':prime_total,
+            'beta_lower':float(beta.a),
+            'inverse_sqrt_upper_at_X1':float(inv_sqrt.b),
+            'prime_count_upper_at_X1':float(count_bound.b),
             'infinite_majorant_upper':float(analytic.b)}
 
 

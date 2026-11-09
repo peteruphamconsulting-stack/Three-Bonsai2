@@ -133,10 +133,17 @@
     }
   ],
   "tail": {
-    "finite_primes_checked": 3852,
+    "finite_primes_checked": 663297,
     "max_finite_upper": 0.9998320673924572,
     "max_finite_at_prime": 10487,
-    "infinite_majorant_upper": 0.7616246752362302
+    "post_50021_max_upper": 0.7574349143446191,
+    "post_50021_max_at_prime": 50053,
+    "window_endpoint": 10000000,
+    "all_primes_in_window": 664579,
+    "beta_lower": 0.5572235705269325,
+    "inverse_sqrt_upper_at_X1": 0.001700756443353748,
+    "prime_count_upper_at_X1": 0.06695444124589764,
+    "infinite_majorant_upper": 0.47971288278110846
   },
   "universal_states": "CERTIFIED",
   "aspect_interval": [

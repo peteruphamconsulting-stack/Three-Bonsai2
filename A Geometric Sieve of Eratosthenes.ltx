@@ -1,0 +1,1097 @@
+\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\newcommand{\lpf}{\operatorname{lpf}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\theoremstyle{thmstyleone}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{thmstylethree}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+\raggedbottom
+
+\begin{document}
+
+\title[A Geometric Sieve of Eratosthenes]{A Geometric Sieve of Eratosthenes:
+Least-prime-factor densities, perfect packings, and the integers as a point set}
+
+\author*[1]{\fnm{Peter} \sur{Upham}}\email{founder@threebons.ai}
+% \author[1]{\fnm{Peter} \sur{Upham}}\email{founder@threebons.ai}\orcid{https://orcid.org/0009-0004-9940-5859}
+
+\affil[1]{\orgname{Independent Researcher}, \orgaddress{\country{USA}}}
+
+\abstract{%
+For each prime $p$, let $d_p$ be the natural density of integers whose least prime factor is $p$; these densities sum to $1$. We realize this partition geometrically by perfect packings with one piece of area $d_p$ per prime. In the axis-parallel similar-rectangle model we determine the exact feasible interval of container aspect ratios,
+$1/\sqrt2+1/\sqrt6\le r\le\sqrt6$, using sixteen interval-certified finite schedules and an arrangement-independent infinite continuation criterion. Moreover, every shifted least-prime-factor state beginning at a prime $s\ge3$ admits a perfect square packing, and the state $2$ square packing is impossible; this supplies a recursive realization of the integer-state dissection. We also prove perfect self-similar packings of an aspect-$0.63$ ellipse and an isosceles right triangle, obtained from certified finite heads and explicit eroded-volume tail estimates. The resulting constructions represent the same arithmetic state structure in polygonal and smooth convex geometries. An exact staircase dissection also yields a limiting direction $\arctan(e^L)\approx56.29^\circ$ for an explicit convergent prime series $L$.%
+}
+
+\keywords{Perfect packing, Least prime factor, Prime density, Guillotine partition,
+Self-similar dissection, Mertens' theorem}
+
+\pacs[MSC Classification]{52C15, 11N05, 28A80, 11A41}
+
+\maketitle
+
+\section{Introduction}
+
+Let $p_1=2<p_2=3<\cdots$ be the primes, and for a prime $p$ let
+\begin{equation}\label{eq:dp}
+d_p \;=\; \frac1p\prod_{q<p}\Bigl(1-\frac1q\Bigr)\;=\;\frac{\varphi(m)}{p\,m},\qquad m=\prod_{q<p}q,
+\end{equation}
+the natural density of $\{n\in\N:\lpf(n)=p\}$, where $\lpf$ denotes the least prime factor. The first values are
+\[
+d_2=\tfrac12,\quad d_3=\tfrac16,\quad d_5=\tfrac1{15},\quad d_7=\tfrac4{105},\quad
+d_{11}=\tfrac8{385},\quad d_{13}=\tfrac{16}{1001},\;\ldots
+\]
+Writing $R_{<p}=\prod_{q<p}(1-1/q)$, the densities telescope---$d_p=R_{<p}-R_{<p'}$ for $p'$ the next prime---so that $\sum_{p\le P}d_p=1-R_{<P'}$; the tail $R_{<P'}\to0$ precisely when $\sum_p1/p$ diverges, hence
+\begin{equation}\label{eq:total}
+\sum_{p}d_p=1
+\qquad\Longleftrightarrow\qquad
+\prod_p\Bigl(1-\frac1p\Bigr)=0
+\qquad\Longleftrightarrow\qquad
+\sum_p\frac1p=\infty .
+\end{equation}
+The divergence of $\sum_p1/p$ is thus exactly what completes the partition.
+The identity $\sum_p d_p=1$ is an immediate consequence of the telescoping in
+\eqref{eq:total} together with Euler's theorem, both classical. Its explicit statement as a standalone partition of
+unity appears to have been recorded at least once before, by Hicks and Ward \cite{HicksWard}, as a
+curiosity. This paper takes it as the starting point of a geometric program: realize the partition
+$\{d_p\}$ as a packing of a fixed planar shape and study
+the resulting configuration.
+
+There are several contributions. Section~\ref{sec:integers} first isolates the arithmetic recursion common to every geometric realization: a closed cell-area formula, a Markov state structure, and the shifted least-prime-factor families that appear inside every cell. Sections~\ref{sec:rect}--\ref{sec:packing} then prove the three packing theorems, all unconditionally. The similar-rectangle model admits a sharp classification for $1/\sqrt2+1/\sqrt6\le r\le\sqrt6$ (\S\ref{sec:rect}), via sixteen interval-certified guillotine heads and an arrangement-independent continuation estimate; the shifted families for all prime states $s\ge3$ admit perfect square packings, providing a recursive state realization. The aspect-$0.63$ ellipse is perfectly packed by similar ellipses of areas $d_p$ (\S\ref{sec:ellipse}), via an eroded-volume capacity bound that shares the rectangle's prime estimates and an interval-certified $1650$-piece head; Part B proves that the arithmetic state recursion propagates through smooth curved cells. The isosceles right triangle is perfectly packed by similar triangles of areas $d_p$ (\S\ref{sec:packing}) using the same eroded-volume capacity method, with mixed-area constant $\kappa_T=3/\sqrt2$, an interval-certified $10906$-piece head, and a family of $45$ per-state heads carrying the full recursion into triangular cells. Anisotropy emerges as the property a self-similar realization requires: the axis-parallel square and the disk fail. Section~\ref{sec:angle} studies the limiting direction of an exact staircase dissection, and Section~\ref{sec:realizations} collects the skeleton, graph-directed, and gauge consequences of the recursive realizations. Section~\ref{sec:realizations} also distinguishes the canonical recursive structure from pointwise gauge choices, while Section~\ref{sec:open} lists open problems.
+
+\section{Asymptotics, literature, and terminology}\label{sec:models}
+
+Write $R(x)=\prod_{p\le x}(1-1/p)$ for the density not yet claimed after sieving by primes up to $x$. Mertens'
+third theorem \cite{Tenenbaum} gives
+\begin{equation}\label{eq:mertens}
+R(x)\;\sim\;\frac{e^{-\gamma}}{\ln x},\qquad e^{-\gamma}=0.5614594836\ldots
+\end{equation}
+Thus the geometric filling is logarithmically slow: the first $25$ pieces (primes through $97$) cover about
+$88\%$ of the region, while covering $99\%$ requires all primes up to roughly $e^{56}\approx2\times10^{24}$.
+Halving the uncovered area requires squaring the prime. In index form, $p_n\sim n\ln n$ gives piece areas and
+linear scales
+\begin{equation}\label{eq:index}
+t_n=d_{p_n}\sim\frac{e^{-\gamma}}{n\ln^2 n},\qquad
+s_n=\sqrt{t_n}\sim\frac{c}{\sqrt n\,\ln n},\qquad
+\sum_n s_n=\infty,\quad \sum_n s_n^2=1 .
+\end{equation}
+
+\paragraph{Position in the perfect-packing literature.} Meir and Moser \cite{MeirMoser} asked whether the squares
+of side $1/n$, $n\ge2$, perfectly pack a rectangle of area $\pi^2/6-1$; the problem remains open. For side lengths
+$n^{-t}$, perfect packings of a square are known for $\tfrac12<t\le\tfrac23$ (Januszewski--Zielonka \cite{JZ2021},
+after Chalcraft \cite{Chalcraft} and W\"astlund \cite{Wastlund}), and Tao \cite{Tao} reaches all $\tfrac12<t<1$ at
+the cost of discarding finitely many initial squares; triangle analogues at exponent $\tfrac12+\epsilon$ appear in
+\cite{JZtriangle}. Closest to the present setting, Sono \cite{Sono} generalizes Tao's theorem to side lengths
+$f(n)^{-t}$ for suitable $f$---including $f(n)=p_n$, the $n$th prime---for every $\tfrac12<t<1$, with effective
+bounds on the number of discarded initial pieces. The LPF side lengths in \eqref{eq:index} have the distinct
+logarithmically corrected form $c/(\sqrt n\ln n)$; their late pieces are small relative to the remaining
+area, and the principal geometric restriction comes from the largest prescribed pieces. This paper determines
+that restriction sharply for the axis-parallel similar-rectangle model, and supplies complete constructions for
+two further convex containers. In every model the identity $\sum d_p=1$ makes placement of the
+entire sequence equivalent to a perfect packing, with residual area after the prime-$p$ head equal to $R(p)$.
+
+\begin{definition}[Admissible placement; perfect packing]\label{def:perfect}
+Fix a container $C$ of area $1$. A \emph{placement} assigns to each prime $p$ a closed set $P_p\subset C$ that is a
+similar copy of $C$ of area $d_p$, the $P_p$ having pairwise-disjoint interiors. It is \emph{admissible} in a given
+model if each $P_p$ arises by that model's allowed motions of $C$: for the similar-rectangle model
+(\S\ref{sec:rect}), axis-parallel placements in either of the two axis-parallel orientations; for the
+similar-ellipse model (\S\ref{sec:ellipse}), translations in the two axis-parallel orientations
+($0^{\circ}$ or $90^{\circ}$); for the triangle model (\S\ref{sec:packing}), the eight axis-aligned
+$45^{\circ}$ orientations. The placement is a \emph{perfect
+packing} if $\bigcup_p P_p$ covers $C$ up to measure zero. Since $\sum_p d_p=1$, a placement of \emph{all} the
+pieces has total area $1$, so disjoint interiors already force coverage up to measure zero: an admissible
+placement of every piece is automatically perfect.
+\end{definition}
+
+\subsection{Notation and terminology}\label{sec:notation}
+
+Several recurring notions below are named informally; Table~\ref{tab:terms} collects them, with conventional
+equivalents where they exist. Standard usage is adopted without further comment for the following terms: \emph{guillotine} cuts (a cut
+spanning a rectangle edge to edge)~\cite{GilmoreGomory}, the $\alpha$-\emph{fatness} of a planar region (a lower
+bound on its inradius-to-size ratio)~\cite{FatTriangles}, \emph{similar} figures, and the \emph{state} of a
+Markov system.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lp{7.1cm}l@{}}
+\toprule
+Term & Meaning & Standard analogue\\
+\midrule
+head\,/\,tail & the first finitely many primes $q\le q_0$ (placed by certified computation)\,/\,the primes $q>q_0$ (bounded analytically) & head/tail of a sequence\\
+configuration-space criterion & positive area of admissible translations after excluding the earlier pieces & translative exclusion bound\\
+eroded-volume criterion & the sufficient condition \eqref{eq:tristar} that a similar piece fits by positive eroded area (ellipse, triangle) & capacity/free-volume bound\\
+mixed-area constant & $\kappa_*$ and $\bar\kappa$ (ellipse), or $\kappa_T=3/\sqrt2$ (triangle): boundary-tax coefficients & Minkowski mixed area\\
+state head & the finite certified head packing a state-$s$ cell's largest children (non-tiling models) & ---\\
+fatness invariant & $\operatorname{inradius}(F_q)\ge c\sqrt{\operatorname{area}(F_q)}$ for all $q$ & $\alpha$-fatness\\
+gauge & a choice of geometric embedding of the integers into the container & coordinatization\\
+placeability & the condition $\operatorname{inradius}(F)\ge a_q$ that $F$ admits the next piece & ---\\
+skeleton & the union of all cut-boundaries of the dissection (not the medial axis) & ---\\
+\bottomrule
+\end{tabular}
+\caption{Terminology used throughout.}\label{tab:terms}
+\end{table}
+
+\section{The least-prime-factor recursion and state structure}\label{sec:integers}
+
+Before choosing a geometric container, it is useful to isolate the arithmetic recursion that the packing must realize. At this stage we use $[n]$ for an \emph{abstract arithmetic cell}: its mass is the natural density of the integer set it represents, and its children are determined entirely arithmetically. Section~\ref{sec:rect} provides the first geometric realization of this state tree.
+
+The prime cell $[p]$ represents $\{pm:\ m=1\text{ or }\lpf(m)\ge p\}$, so it carries, in miniature, a complete copy
+of the sieve \emph{restricted to primes $\ge p$}; for $p=2$ this is the entire original pattern. The
+restricted sieve is again complete at every level:
+\[
+\sum_{q\ge p}\frac1q=\infty\quad\Longrightarrow\quad\prod_{r\ge p}\Bigl(1-\frac1r\Bigr)=0 .
+\]
+Iterating, each integer $n\ge2$ with sorted factorization
+$q_1\le q_2\le\cdots\le q_k$ names a nested chain of cells, and:
+
+\begin{proposition}[Cell area]\label{prop:cell}
+The abstract cell $[n]$ (representing $\{nm:\ m=1\text{ or }\lpf(m)\ge P(n)\}$, where $P(n)$ is the largest prime factor) has prescribed mass
+\[
+\operatorname{area}[n]\;=\;\frac1n\prod_{r<P(n)}\Bigl(1-\frac1r\Bigr).
+\]
+\end{proposition}
+
+\begin{proof}
+The cell represents $S_n=\{nm:m=1\}\cup\{nm:\lpf(m)\ge P(n)\}$, and we prescribe $\operatorname{area}[n]$ to be the natural
+density of $S_n$; the packing theorems below realize these masses geometrically. The singleton contributes density $0$. The map $m\mapsto nm$
+is a bijection onto the multiples of $n$ and scales density by $1/n$, so
+$\operatorname{dens}(S_n)=\tfrac1n\operatorname{dens}\{m:\lpf(m)\ge P(n)\}$. Integers with no prime factor below
+$P(n)$ have density $\prod_{r<P(n)}(1-1/r)$ (a finite product, by inclusion--exclusion over the finitely many
+primes $r<P(n)$, as distinct-prime divisibilities are independent). Combining gives the formula.
+\end{proof}
+
+\noindent The descendant structure of an abstract cell depends only on the largest prime in its chain---the sieve forgets
+everything but its last letter---which yields the state reduction used throughout the geometric constructions.
+
+\begin{proposition}[Markov self-similarity]\label{prop:markov}
+If $P(m)=P(n)$ then $[m]$ and $[n]$ carry identical descendant trees with identical relative masses. In any geometric realization whose layout
+depends only on the state $P(\cdot)$, the corresponding cells are therefore similar with ratio $\sqrt{n/m}$.
+\end{proposition}
+
+\begin{proof}
+The children of $[k]$ are the cells $[kq]$ for primes $q\ge P(k)$, and recursively their descendants; this data
+depends on $k$ only through $P(k)$, so $P(m)=P(n)=p$ forces identical (abstract) sub-dissection trees with
+identical area ratios at every node. A construction that places each child by a rule depending only on the state
+$P$ realizes the two trees by similar geometric figures; the ratio is fixed by areas, $\operatorname{area}[m]/
+\operatorname{area}[n]=(1/m)/(1/n)=n/m$ (the products $\prod_{r<p}$ cancel), giving linear ratio $\sqrt{n/m}$.
+For $m=15,n=5$ ($p=5$) the ratio is $\sqrt{5/15}=1/\sqrt3$.
+\end{proof}
+
+
+For later use, fix a prime state $s$. Relative to a state-$s$ cell, the child indexed by a prime $q\ge s$ has area share
+\begin{equation}\label{eq:sigma}
+\sigma_s(q)=\frac1q\prod_{s\le t<q}\Bigl(1-\frac1t\Bigr)=\frac{d_q}{R_{<s}}\qquad(q\ge s\ \text{prime}).
+\end{equation}
+These shifted shares again form a partition of unity, $\sum_{q\ge s}\sigma_s(q)=1$. Thus every abstract cell presents the same least-prime-factor packing problem with a shifted starting state; state $2$ is the original family $\sigma_2(q)=d_q$. The arithmetic input is now complete: what remains is to show that these prescribed masses and state transitions can actually be realized inside geometric containers. We begin with a model in which the free region can be represented exactly at every finite step.
+
+\section{Sharp aspect-ratio classification in the similar-rectangle model}\label{sec:rect}
+
+Let the container have area one and aspect ratio $r\ge1$, with side lengths $\sqrt r$ and $1/\sqrt r$.  For each prime $p$, a piece is a rectangle similar to the container, of area $d_p$, placed axis-parallel and optionally rotated by $90^\circ$.  Its aligned side lengths are $\sqrt{rd_p}$ and $\sqrt{d_p/r}$.  The finite heads below use guillotine placements.  The infinite continuation uses an arrangement-independent configuration-space estimate and need not preserve a guillotine partition of the free region.
+
+\begin{theorem}[Sharp aspect-ratio classification]\label{thm:rect}
+An area-one rectangle of aspect ratio $r\ge1$ admits a perfect axis-parallel packing by similar rectangles of areas $d_p$, one for each prime, if and only if
+\begin{equation}\label{eq:rect-range}
+\frac1{\sqrt2}+\frac1{\sqrt6}\le r\le\sqrt6.
+\end{equation}
+Throughout this interval the shifted prime-state families $\{\sigma_s(q):q\ge s\}$, $s\ge3$, likewise admit perfect packings in similar parent cells, so the packing can be propagated through the integer-state recursion.
+\end{theorem}
+
+\begin{proof}
+\emph{Necessity.}  Put $a=1/\sqrt2$ and $b=1/\sqrt6$.  Two axis-parallel rectangles with disjoint interiors must have disjoint projections onto at least one coordinate axis.  Testing the four orientation pairs for pieces $2$ and $3$, with the individual containment constraints, gives the necessary interval $a+b\le r\le1/b=\sqrt6$.  Conversely, the relevant two-piece heads fit at both endpoints: at the lower endpoint the two rotated pieces sit in adjacent columns, and at the upper endpoint piece $2$ is aligned while piece $3$ is rotated and spans the container height.  Intermediate parameters admit one of the orientation patterns $RR$, $RA$, or $AR$, where $R$ denotes rotation and $A$ alignment.
+
+\emph{Uniform infinite continuation.}  Thereafter require every piece $q\ge5$ to be aligned.  Write
+\[
+T_{<q}=\sum_{p<q}\sqrt{d_p},\qquad
+N_q=\#\{p<q:p\text{ prime}\},\qquad
+C_{\max}=\sqrt6+1/\sqrt6.
+\]
+For an aligned candidate in the container, the area of admissible lower-left positions is at least the free area $R_{<q}$ minus the configuration-space exclusion regions of the earlier pieces.  An earlier aligned rectangle contributes cross coefficient $2$; an orthogonal rectangle contributes $r+r^{-1}\le C_{\max}$.  Since at most pieces $2$ and $3$ are orthogonal, a sufficient condition, independent of their positions, is
+\begin{equation}\label{eq:rect-tail-criterion}
+\frac{2+2T_{<q}+(C_{\max}-2)(a+b)}{\sqrt{qR_{<q}}}
++\frac{N_q-1}{q}<1.
+\end{equation}
+The companion interval calculation checks this at every prime $10477<q\le10^7$;
+the largest certified upper endpoint is $0.999832068$ at $q=10487$.
+For $q\ge X_1=10^7$, Appendix~\ref{app:tail} establishes the three decreasing bounds
+\[
+\frac{3T_{\le q}+\sqrt2}{\sqrt{qR_{<q}}}<0.614,
+\qquad \frac1{\sqrt{qR_{<q}}}
+\le\sqrt{\frac{\ln q}{\beta q}},
+\qquad \frac{N_q}{q}\le\frac{1}{\ln q}\left(1+\frac{1.2762}{\ln q}\right),
+\quad \beta=e^{-\gamma}\left(1-\frac1{\ln^2 10^5}\right).
+\]
+In particular the left side of \eqref{eq:rect-tail-criterion} is at most
+\[
+\frac23(0.614)+
+\left(2+(C_{\max}-2)(a+b)-\frac{2\sqrt2}{3}\right)
+\sqrt{\frac{\ln X_1}{\beta X_1}}
++\frac{1+1.2762/\ln X_1}{\ln X_1}<0.481<1.
+\]
+Thus any disjoint head through $10477$, with subsequent pieces aligned, extends to all primes by induction.  Since $\sum_p d_p=1$, the resulting packing is perfect.
+
+\emph{Finite interval cover.}  Affinely normalize the container to the unit square.  An aligned piece becomes a square of side $\sqrt{d_p}$, while a rotated piece has dimensions $(\sqrt{d_p}/r,r\sqrt{d_p})$.  For a fixed combinatorial guillotine schedule, free-rectangle widths are of the form $A+B/r$ and heights of the form $C+Dr$, with schedule-dependent coefficients.  The corresponding fit constraints are linear inequalities in $r$ after multiplication by the positive factor $r$ where appropriate.  Hence interval validity follows from checking the endpoints.
+
+The companion certificate contains sixteen schedules of the first $1282$ prime pieces, through $10477$.  Their initial orientation choices belong to $RR$, $RA$, and $AR$; all pieces from $5$ onward are aligned.  Each interval's placement inequalities are checked at both endpoints in outward-rounded interval arithmetic.  The intervals overlap and cover the interior of \eqref{eq:rect-range}.  At the two algebraic extremes the necessary first-two-piece contacts are equalities, while the remaining $2563$ checked constraints retain certified positive lower margins of $3.71\cdot10^{-7}$ and $3.02\cdot10^{-7}$, respectively.  This closes the full interval, including its endpoints.
+
+\emph{Shifted states.} Within a state-$s$ parent, $s\ge3$, align every child with its parent. Affine normalization then gives a square-packing problem with areas $\sigma_s(q)$. Eight interval-certified finite heads cover states $s=3,5,7,11,13,17,19,23$. The square capacity criterion holds from its first piece at $s=29$ and, by monotone state comparison, for every larger prime state. Its finite state windows extend to $50021$; beyond that point the square-state capacity is bounded above by the already certified rectangle criterion \eqref{eq:rect-tail-criterion}, which covers all primes through $10^7$ and beyond. State-$2$ cells (including $[2],[4],[8],\ldots$) are packed using the main aspect-$r$ rectangle construction, while state-$s$ cells with $s\ge3$ use their aligned-square construction. Inserting these packings recursively realizes the complete arithmetic state structure.
+\end{proof}
+
+\begin{remark}[Certificate and logical scope]\label{rem:reproduce}
+The proof uses finite, reproducible interval certificates for the sixteen rectangle schedules and eight square-state heads, together with explicit analytic bounds for their infinite continuations. The certified interval endpoints, schedule identifiers and tail maxima are recorded in the companion materials~\cite{Code}, whose verifier reconstructs the placement inequalities in outward-rounded interval arithmetic.
+\end{remark}
+
+\begin{remark}[Why the continuation is robust]\label{rem:rect-status}
+The free area before prime $q$ is exactly $R_{<q}$, while the new piece occupies only $d_q=R_{<q}/q$.  The configuration-space estimate \eqref{eq:rect-tail-criterion} uses only the piece areas, their prescribed orientations, and the container aspect ratio; it makes no assumption on the shape, number, or maturity of the remaining free components.  In particular, the finite heads need not leave a similar reserve or any special free-rectangle invariant.
+\end{remark}
+
+\begin{remark}[Aspect ratio and recursive compatibility]\label{rem:rwindow}
+The sharp interval \eqref{eq:rect-range} concerns the axis-parallel similar-rectangle model with rotations by $90^\circ$.  Its endpoints are forced by the initial two pieces; the finite interval cover and uniform continuation prove sufficiency for every intermediate ratio.  The shifted-state square theorem permits recursion inside similar cells throughout this range, although it does not require the initial head itself to possess a particular guillotine reserve.
+\end{remark}
+
+Figure~\ref{fig:rect} illustrates the established $r=\sqrt2$ packing.  The classification above is a statement about all ratios in \eqref{eq:rect-range}, not a claim that the displayed $\sqrt2$ schedule is valid unchanged at every ratio.
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.72\textwidth]{rect_packing.png}
+\caption{A finite guillotine packing head at $r=\sqrt2$. The aspect-ratio classification uses sixteen parameter-certified schedules and an arrangement-independent tail.}
+\label{fig:rect}
+\end{figure}
+
+
+\section{Perfect packing in the similar-ellipse model}\label{sec:ellipse}
+
+The rectangle of \S\ref{sec:rect} gives an exact polygonal realization; we now pass to a smooth one.
+Packed as \emph{similar ellipses} into an ellipse, the same areas $d_p$ again admit an unconditional perfect
+packing. Part A proves the prime-level packing, and Part B then returns to the arithmetic recursion of
+Section~\ref{sec:integers} and propagates the construction through every state, yielding a recursive realization
+in smooth, curved cells. This is the model nearest the round shapes for which the question is classically posed. Throughout, the container is an ellipse of area $1$ and aspect ratio $r\in(0,1)$ (semi-axes in ratio
+$1:r$), the piece for prime $p$ is the \emph{similar} ellipse of area $d_p$ in one of two axis-parallel
+orientations ($0^{\circ}$ or $90^{\circ}$). The exact normalized mixed-area constants are $1$ for aligned ellipses
+and $\kappa_*(r)=\frac{2}{\pi r}E(1-r^4)$ for orthogonal ones, where $E$ denotes the complete elliptic integral
+of the second kind; write $\bar\kappa=(1+\kappa_*)/2$. We fix the exact rational aspect $r=0.6296271949192772$ for the certified head.
+For each fixed $r>0$ the analytic continuation applies after a sufficiently large finite head.
+Since $\sum_pd_p=1$, any placement of every piece is a perfect packing, and the whole problem is again to
+place every piece.
+
+Two structural differences from \S\ref{sec:rect} organize the section. First, ellipses do not tile: at every finite
+stage the placed pieces leave a positive-measure residue of curvilinear gaps, so there is no exact reserve-and-fringe
+ledger. We replace that exact ledger by an \emph{eroded-volume capacity}, a boundary-layer bound of
+Steiner--Minkowski type that does not require the free region to be a union of prescribed shapes. Second, once this
+geometric loss is bounded, the resulting placeability criterion reduces to the same arithmetic quantities already
+introduced for the rectangle, namely $T_{<q}=\sum_{p<q}\sqrt{d_p}$ and $R_{<q}$, now weighted by $\bar\kappa$.
+Thus the new work in this section is geometric; the infinite-tail estimates remain those of Appendix~\ref{app:tail}.
+
+\subsection{Part A: the prime packing}
+
+The isotropic limit $r=1$ is exactly where the model fails, which is the sharp form of why an aspect ratio is needed
+at all.
+
+\begin{proposition}[Isotropy obstruction]\label{prop:iso}
+For $r=1$ (disks) no perfect packing exists: pieces $2$ and $3$ already cannot be placed. They are disks of radii
+$a_2=(2\pi)^{-1/2}=0.39894$ and $a_3=(6\pi)^{-1/2}=0.23033$, so disjointness needs their centres at distance
+$\ge a_2+a_3=0.62927$; but in the disk container each centre is constrained to the concentric disk of radius
+$\pi^{-1/2}-a_i$, so the two centres are separated by at most $2\pi^{-1/2}-a_2-a_3=0.4991$. Hence $r=1$ is infeasible, and by continuity so is a
+neighbourhood of it; anisotropy ($r\ne1$) is necessary. Together with the first-two-piece square obstruction
+in Theorem~\ref{thm:rect}, this shows that the two isotropic containers, angular and round, are excluded.
+\end{proposition}
+
+The elongation of an ellipse is what removes this: the area-$\tfrac12$ piece lies along the container's long axis
+and its neighbours turn $90^{\circ}$ to seat beside it, as in Figure~\ref{fig:ellipse}. We now make the placement
+of every piece unconditional. The boundary tax is governed by the Minkowski mixed area \cite{Schneider}, for which
+similar ellipses give a clean constant.
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.86\textwidth]{ellipse_packing.png}
+\caption{The perfect packing of the aspect-$0.6296$ ellipse by similar ellipses of areas $d_p$
+(the certified head, primes labelled through $47$). Piece $2$ has area $\tfrac12$; its elongation lets it lie along
+the long axis while neighbours turn $90^{\circ}$, which is what the isotropic disk ($r=1$, Proposition~\ref{prop:iso})
+cannot do. Colour runs deep-to-light in $\log\log p$.}
+\label{fig:ellipse}
+\end{figure}
+
+\begin{lemma}[Mixed area of similar ellipses]\label{lem:mixed}
+For two similarly scaled copies of the area-one aspect-$r$ ellipse, the mixed area is
+\[
+A(E_i,E_q)=\kappa_{iq}\sqrt{d_i d_q},\qquad
+\kappa_{iq}=\begin{cases}1,&\text{same orientation},\\
+\kappa_*(r):=\dfrac{2}{\pi r}E(1-r^4),&\text{orthogonal},\end{cases}
+\]
+where $E(m)=\int_0^{\pi/2}\sqrt{1-m\sin^2 t}\,dt$. At $r=0.6296271949192772$,
+$\kappa_*=1.1613614683\ldots$ and $\bar\kappa=1.0806807341\ldots$.
+\end{lemma}
+
+\begin{proof}
+For homothetic ellipses the mixed area equals the geometric mean of their areas. For orthogonal copies,
+use the support-function formula $A(K,L)=\tfrac12\int_{\partial L}h_K(n_L)\,ds_L$.
+If the container has semi-axes $(a,b)$, $ab=1/\pi$, and the second ellipse is rotated by $90^\circ$,
+the integrand in the boundary parameter $t$ simplifies to
+$\sqrt{a^4\cos^2t+b^4\sin^2t}\,dt$. Consequently,
+\[
+A(E,E^\perp)=\frac12\int_0^{2\pi}\sqrt{a^4\cos^2t+b^4\sin^2t}\,dt
+=2a^2 E(1-r^4)=\frac{2}{\pi r}E(1-r^4).
+\]
+Scaling gives the general formula. The Minkowski sum of nonhomothetic ellipses is generally not an ellipse;
+in particular, mixed area is not bilinear in the four semi-axis parameters.
+\end{proof}
+
+For an open $F\subseteq\Omega$ and a convex body $E$, write $\mathcal C_E(F)=\operatorname{area}(F\ominus E)$ for the
+area of the Minkowski erosion $F\ominus E=\{x:x+E\subseteq F\}$; since ellipses are centrally symmetric,
+$\mathcal C_E(F)>0$ certifies a placeable translate of $E$. After the primes $p<q$ are placed with disjoint
+interiors the free region is $F_q=\Omega\setminus\bigcup_{p<q}\overline{E_p}$, with $\operatorname{area}(F_q)=R_{<q}$
+by \eqref{eq:total}; write $N_q=\pi(q)-1$ for the number of placed pieces.
+
+\begin{lemma}[Eroded-volume capacity]\label{lem:cap}
+At the certified aspect ratio $r=0.6296271949192772$, for $q\ge7$ at least one of the two orientations $E_q^0,E_q^{90}$ satisfies
+\[
+\mathcal C_{E_q^j}(F_q)\ge
+R_{<q}-2\bar\kappa\sqrt{d_q}\bigl(1+T_{<q}\bigr)-N_qd_q,
+\qquad T_{<q}=\sum_{p<q}\sqrt{d_p}.
+\]
+\end{lemma}
+
+\begin{proof}
+For each proposed orientation $j$, the forbidden translations are bounded by the inner boundary layer of the
+container and the outer Minkowski layers of the previously placed ellipses. The exact inner Steiner identity
+$|\Omega\ominus E_q^j|=|\Omega|-2A(\Omega,E_q^j)+d_q$ applies when $E_q^j$ is a Minkowski summand of
+$\Omega$. Aligned pieces are homothetic summands. For perpendicular pieces, comparison of curvature radii
+gives the sufficient condition $\sqrt{d_q}\le r^3$, which holds for every $q\ge7$ at the certified aspect.
+The outer Steiner identity always holds, and the union bound yields, for each $j$,
+\[
+\mathcal C_{E_q^j}(F_q)\ge
+R_{<q}-2A(\Omega,E_q^j)-2\sum_{p<q}A(E_p,E_q^j)-N_qd_q.
+\]
+Whatever the orientation of an earlier piece $E_p$, Lemma~\ref{lem:mixed} gives
+\[
+A(E_p,E_q^0)+A(E_p,E_q^{90})=(1+\kappa_*)\sqrt{d_pd_q},
+\]
+and similarly $A(\Omega,E_q^0)+A(\Omega,E_q^{90})=(1+\kappa_*)\sqrt{d_q}$.
+The larger of the two eroded capacities is at least their average. This proves the stated lower bound with
+$2\bar\kappa=1+\kappa_*$, regardless of earlier orientation choices.
+\end{proof}
+
+The container enters as a piece of area $1$---the ``$+1$'' inside $1+T_{<q}$---the only structural cost of a bounded
+container, absent for a torus.
+
+\begin{lemma}[Placeability reduction]\label{lem:ellreduce}
+For $q\ge7$, if
+\begin{equation}\label{eq:ellstar}
+\frac{2\bar\kappa\bigl(1+T_{<q}\bigr)}{\sqrt{q\,R_{<q}}}\;+\;\frac{N_q}{q}\;<\;1,
+\end{equation}
+then at least one of the two eroded capacities is positive and $E_q$ is placeable. The criterion depends only on the prime data, not on the
+positions of the placed pieces.
+\end{lemma}
+
+\begin{proof}
+Divide Lemma~\ref{lem:cap} by $R_{<q}>0$; positivity is $2\bar\kappa\sqrt{d_q}(1+T_{<q})/R_{<q}+N_qd_q/R_{<q}<1$, and
+$\sqrt{d_q}/R_{<q}=1/\sqrt{q\,R_{<q}}$, $d_q/R_{<q}=1/q$.
+\end{proof}
+
+This is the ellipse counterpart of the rectangle configuration-space estimate in \eqref{eq:rect-tail-criterion}.
+The orientation-averaged coefficient is $2\bar\kappa=1+\kappa_*$, and the leading decay is
+$(4\bar\kappa+1)/\ln q$. Its infinite-range estimate uses the explicit prime bounds of
+Appendix~\ref{app:tail}, with a finite certified window to $10^7$.
+
+\begin{lemma}[Explicit threshold]\label{lem:ellthresh}
+For the certified aspect ratio $r=0.6296271949192772$,
+$\kappa_*=1.161361468300\ldots$ and $\bar\kappa=1.080680734150\ldots$.
+The averaged criterion \eqref{eq:ellstar} holds for every prime $q>13967$.
+The first subsequent prime $13997$ has certified upper value $0.976696$, and the maximum upper endpoint
+through $10^7$ is $0.976918$, attained at $q=14011$.
+\end{lemma}
+
+\begin{proof}
+The revised companion verifier \texttt{python3 ellipse\_certify.py tail} evaluates the exact prime sums in
+outward-rounded interval arithmetic at every prime $13967<q\le10^7$, checking $664579$ primes in the full
+sieve window, of which $664579-1650=662929$ lie beyond the retained head.
+All tested upper endpoints are strictly below one, with the maximum stated in the lemma.
+For $q\ge X_1=10^7$, Appendix~\ref{app:tail} and the Rosser--Schoenfeld/Dusart prime bounds give
+$R_{<q}\ge\beta/\ln q$ with $\beta\ge0.557223571$ and the explicit uniform prefix majorant
+\[
+\frac{T_{<q}(\ln q)^{3/2}}{\sqrt q}
+\le T_{\le Q_1}\sqrt{\frac{(\ln q)^3}{q}}+K,
+\qquad Q_1=10^5,\quad K\le2.063589925.
+\]
+Substitution into \eqref{eq:ellstar}, retaining both the finite-prefix and container terms, gives an
+upper bound $0.510827407$ at $X_1$, decreasing thereafter. This establishes the infinite tail without
+using the value of $A(q)$ at one point as an upper bound for all later $q$.
+\end{proof}
+
+\begin{theorem}[Certified head]\label{thm:ellhead}
+The $\pi(13967)=1650$ pieces $\{E_p:p\le13967\}$ admit a placement in $\Omega$ with pairwise disjoint interiors, whose
+$1650$ centres are recorded in the supplementary file.
+\end{theorem}
+
+\begin{proof}
+The placement is exhibited by a floating-point largest-clearance search and then \emph{certified}, independently of
+the search, in the frame with container semi-axes $(1,r)$, where the shape matrix of a piece of area-share $s$ is
+$\operatorname{diag}(s,s\,r^2)$---rational, since $s\in\Q$ and $r$ is a fixed rational decimal. Disjointness is decided for
+each of the $\binom{1650}{2}=1{,}360{,}425$ pairs: a pair whose centre distance exceeds the sum of its
+circumscribed-disk radii $\sqrt{d_p}+\sqrt{d_q}$ (by a wide certified margin) is disjoint outright, and every
+remaining pair receives an \emph{exact} rational Perram--Wertheim witness:
+the contact function $F(\lambda)=\lambda(1-\lambda)\,\mathbf r^{\!\top}[(1-\lambda)A_i+\lambda A_j]^{-1}\mathbf r$ is a
+rational function of $\lambda$, and a rational $\lambda^{\ast}$ with $F(\lambda^{\ast})>1$ (evaluated in exact
+arithmetic) proves $\max_\lambda F>1$, hence disjointness (Remark~\ref{rem:pwwitness}). Containment of each piece is decided
+by adaptive interval subdivision of the support gap $\langle c_i,u\rangle+\sqrt{u^{\!\top}A_iu}-\sqrt{u^{\!\top}A_
+\Omega u}\le0$ over $u\in S^1$ in $200$-bit arithmetic. All inequalities are certified; the minimum pairwise
+clearance is $1.7\times10^{-4}$ and the head covers area $\sum_{p\le13967}d_p=1-R_{<13997}$. The verification is a
+reproducible transcript of the certifier \cite{Code}, checked by a second independent interval implementation.
+\end{proof}
+
+\begin{remark}[The rational witness]\label{rem:pwwitness}
+The disjointness certificate is one-sided and elementary, and needs none of the optimization theory surrounding
+the contact function in its home literature. Writing $Q_k(x)=(x-c_k)^{\!\top}A_k^{-1}(x-c_k)$ for the quadratic
+form of piece $k$ (so the closed piece is $\{Q_k\le1\}$), the function $F$ satisfies, for every
+$\lambda\in[0,1]$,
+\[
+F(\lambda)\;=\;\min_{x\in\mathbb R^2}\;\bigl[\lambda\,Q_i(x)+(1-\lambda)\,Q_j(x)\bigr]
+\]
+\cite{PerramWertheim}; the minimum exists because the shape matrices $A_i,A_j$ are positive definite
+(nondegenerate ellipses), so the blended quadratic is positive definite for every $\lambda\in(0,1)$. If the
+closed pieces shared a point $x_0$, then $Q_i(x_0)\le1$ and $Q_j(x_0)\le1$, whence
+$F(\lambda)\le\lambda+(1-\lambda)=1$ for \emph{every} $\lambda$. A single $\lambda^{\ast}\in(0,1)$ with
+$F(\lambda^{\ast})>1$ therefore proves disjointness: any value of $F$ bounds its maximum from below, so no
+optimality of $\lambda^{\ast}$ is required, and no property of the maximizer---uniqueness included---enters the
+certificate. The verifier proposes $\lambda^{\ast}$ by a floating-point grid
+maximization of $F$ and rounds the argmax by continued fractions to a rational of denominator at most $10^{6}$;
+because the shape matrices are diagonal with rational entries, $F(\lambda^{\ast})$ is then a handful of field
+operations in $\Q$, evaluated exactly in arbitrary-precision rational arithmetic. The floating-point search
+affects only \emph{whether} a witness is found, never the validity of a found witness; a near-tangent pair merely
+demands a $\lambda^{\ast}$ nearer the maximizer (unique for nondegenerate ellipses \cite{PerramWertheim}), and the certified minimum pairwise
+clearance reported in the proof of Theorem~\ref{thm:ellhead} shows the grid resolution was ample.
+\end{remark}
+
+\begin{theorem}[Perfect packing of the ellipse]\label{thm:ellipse}
+The ellipse of area $1$ and aspect ratio $r=0.6296271949192772$ is perfectly packed by pairwise disjoint similar ellipses of
+areas $d_p$, one for each prime.
+\end{theorem}
+
+\begin{proof}
+The head $\{E_p:p\le13967\}$ is placed by Theorem~\ref{thm:ellhead}. Inductively, for each prime $q>13967$,
+Lemma~\ref{lem:ellthresh} gives \eqref{eq:ellstar}, so by Lemma~\ref{lem:ellreduce} at least one of the two
+orientations has positive eroded capacity. Choose that orientation and then a legal translation, disjoint from
+the predecessors. The location is free within the positive-capacity set, but the orientation must be selected
+accordingly. The criterion is arrangement-independent, so induction places every prime; $\sum_pd_p=1$
+makes the residue null.
+\end{proof}
+
+Like Theorem~\ref{thm:rect}, this is computer-assisted in the sense of the four-colour and Kepler theorems: an
+analytic tail (Lemma~\ref{lem:ellthresh}, Appendix~\ref{app:tail}) and a finite head settled by a terminating,
+independently reproducible certificate. The existing $1650$-piece head extends beyond the crossover of the
+orientation-averaged criterion; it is retained unchanged, so no additional geometric head is needed.
+
+The prime-level result is therefore complete. It remains to check that the same capacity argument survives the
+shifted state families of Section~\ref{sec:integers}; this is the only additional step needed to realize the full
+integer recursion in elliptical cells.
+
+\subsection{Part B: the integers}
+
+Because every piece is similar to the container, the recursive dissection of \S\ref{sec:integers} transfers to the
+ellipse exactly as it does to the rectangle: the cell of $n$ is a similar ellipse of area
+$\operatorname{area}[n]=\tfrac1n\prod_{r<P(n)}(1-1/r)$ (Proposition~\ref{prop:cell}), and its sub-dissection depends
+only on the state $P(\cdot)$ (Proposition~\ref{prop:markov}). What must be checked is that each cell is itself
+perfectly packed by its children. By \eqref{eq:sigma}, the children of a state-$s$ cell carry the shifted least-prime-factor family $\{\sigma_s(q)\}_{q\ge s}$ introduced in Section~\ref{sec:integers}. Thus packing a state-$s$ cell is the same arithmetic problem with a shifted starting state; the remaining question is geometric placeability. State $2$ is the container itself ($\sigma_2=d_q$), and it is the hardest state.
+
+\begin{proposition}[State comparison and finite heads]\label{prop:states}
+Run the capacity method of Part A in a state-$s$ cell. Its criterion is
+$2\bar\kappa\,\rho_s(q)+N_s(q)/q+2\bar\kappa\sqrt{R_{<s}}/\sqrt{q\,R_{<q}}<1$, where
+$\rho_s(q)=\bigl(T_{<q}-T_{<s}\bigr)/\sqrt{q\,R_{<q}}$ and $N_s(q)=\#\{p:s\le p<q\}$. Writing $\mathrm{Crit}_s(q)$ for the
+left side and $\mathrm{Crit}_2(q)$ for the container criterion \eqref{eq:ellstar},
+\[
+\mathrm{Crit}_s(q)=\mathrm{Crit}_2(q)-\frac{\pi(s{-}1)}{q}-\frac{2\bar\kappa\bigl(T_{<s}+1-\sqrt{R_{<s}}\bigr)}{\sqrt{q\,R_{<q}}},
+\]
+whose subtracted terms are nonnegative and increasing in $s$. Hence $\mathrm{Crit}_s\le\mathrm{Crit}_2$: state $2$ is
+the unique hardest state, and every state's criterion holds for $q>13967$. Only the ten states
+$s\in\{2,3,5,7,11,13,17,19,23,29\}$ require finite certified
+heads, of sizes $1650,1044,755,594,474,405,321,273,209,171$, respectively; every prime state $s\ge31$
+is covered by the averaged criterion from its first piece (for $s=31$, the reported maximum is below $0.997$).
+\end{proposition}
+
+\begin{proof}
+From \eqref{eq:sigma}, $\sqrt{\sigma_s(p)}=\sqrt{d_p}/\sqrt{R_{<s}}$ and $R_{<q}^{(s)}:=\prod_{s\le t<q}(1-1/t)=
+R_{<q}/R_{<s}$, giving $\rho_s(q)=(T_{<q}-T_{<s})/\sqrt{q\,R_{<q}}$ and the stated container term; substituting into the
+Part-A criterion and collecting against $\mathrm{Crit}_2$ gives the identity, both subtracted terms increasing in $s$
+since $T$ increases and $R_{<s}$ decreases. Monotonicity in $s$ reduces the head-bearing check to a finite
+evaluation (companion code \cite{Code}). The listed sizes refer to the existing, independently verified head files;
+they extend beyond the earlier crossover for the averaged criterion and need not be minimal. The first
+head-free state is $31$.
+\end{proof}
+
+\begin{theorem}[The integers in elliptical cells]\label{thm:ellintegers}
+Given the ten required certified state heads of Proposition~\ref{prop:states}---of which the $1650$-piece state-$2$ head
+(Theorem~\ref{thm:ellhead}) is the largest---the aspect-$r$ ellipse admits the full recursive dissection of
+\S\ref{sec:integers}: every cell $[n]$ is perfectly packed by its children, and along each infinite chain the nested
+similar ellipses shrink to a point, realizing the full integer recursion in smooth cells with null residue.
+\end{theorem}
+
+\begin{proof}
+Fix a cell of state $s$. If $s\ge31$, Proposition~\ref{prop:states} gives its criterion for every $q\ge s$, so the
+capacity method (as in Theorem~\ref{thm:ellipse}) places all its children; if $s\le29$, place the certified head
+first and apply the capacity method for $q$ past that state's crossover. Either way the children are disjoint and fill
+the cell up to measure zero. Applying this at every cell (the states are countable, each handled once) packs the whole
+tree. Down every chain the shrinking is uniform, not merely strict: each descent step multiplies the cell area by
+$\sigma_s(q)=\tfrac1q\prod_{s\le r<q}(1-\tfrac1r)\le\tfrac1q\le\tfrac12$, so a depth-$m$ cell has area at most
+$2^{-m}$ and (the cells being similar) diameter $O(2^{-m/2})$; every infinite chain converges to a point.
+The inner erosion formula is valid whenever the perpendicular candidate is used after a head: at state $s$ the
+normalized piece scale obeys $\sqrt{\sigma_s(q)}\le1/\sqrt q$, while the uniform tail begins at primes large
+enough that $1/\sqrt q\le r^3$. In each head-free state $s\ge31$, this holds from its first piece because
+$1/\sqrt{31}<r^3$ at the certified aspect ratio.
+\end{proof}
+
+This is the curved counterpart of the rectangle's recursive realization of $\N$, and one the disk cannot
+supply (Proposition~\ref{prop:iso}). Two differences from \S\ref{sec:rect} matter at this stage. First, the
+rectangle admits a single square-normalized continuation principle for all shifted states---whereas the non-tiling
+ellipse uses ten necessary certified state heads of Proposition~\ref{prop:states}. Second, the rectangle has the sharp feasible interval \eqref{eq:rect-range}, while the ellipse's aspect enters the
+capacity estimate through $\kappa_*(r)$ and $\bar\kappa(r)$; a neighbourhood of the isotropic value $r=1$ is excluded
+by Proposition~\ref{prop:iso}. Thus the first two models isolate the role of anisotropy in two very different
+geometries. The next section asks whether the non-tiling capacity method itself survives in a polygonal,
+non-centrally-symmetric container.
+
+\section{Perfect packing in the similar-triangle model}\label{sec:packing}
+
+Packed as similar triangles into the isosceles right triangle, the same areas $d_p$ again admit a
+perfect packing. Rather than introduce a third packing mechanism, we reuse the eroded-volume method of
+\S\ref{sec:ellipse}. What changes is entirely shape-specific: the triangle is not centrally symmetric, so the
+container erosion must keep track of orientation, and its mixed-area constants differ from those of the ellipse.
+Once those quantities are computed, the same capacity logic applies. In particular, the $45^{\circ}$ wedge that
+defeats a width-keyed one-dimensional ledger causes no difficulty here, because the argument never requires an
+exact description of the free region; it bounds an eroded area and asks only that it remain positive. Throughout, the container is the triangle $T$
+of area $1$; the piece for prime $p$ is a similar copy of area $d_p$ (leg $\sqrt{2d_p}$), placed corner-anchored in
+one of the eight orientations $k\cdot45^{\circ}$; since $\sum_pd_p=1$, placing every piece is automatically a
+perfect packing, and the whole problem is again to place every piece.
+
+\subsection{Part A: the prime packing}
+
+Accordingly, only two shape-specific inputs must be supplied: the container boundary tax and the mixed-area
+interaction constant. The first is exact and polygonal, and---because $T$, unlike the ellipse, is not centrally
+symmetric---the sign convention deserves three explicit lines. With the erosion
+$F\ominus K=\{x:x+K\subseteq F\}$ and $T$ in the rational-edge frame $\{y\ge0,\ x+y\le1,\ y-x\le1\}$, the support
+functions of $sT$ and $-sT$ against the three edge normals give
+\[
+T\ominus sT=(1-s)T,\qquad
+T\ominus(-sT)=(1-2s)T+(0,s)\quad(s\le\tfrac12),
+\]
+of areas $(1-s)^2$ and $(1-2s)^2$ respectively. The boundary losses are therefore $2s-s^2\le2s$ for a
+container-aligned piece and $4s-4s^2\le4s$ for a $180^{\circ}$ piece: an aligned piece of area $d_q$ (linear scale
+$s=\sqrt{d_q}$) costs at most $2\sqrt{d_q}$---coefficient $b=2$---a $180^{\circ}$ piece at most $4\sqrt{d_q}$, and
+the average of the two at most $3\sqrt{d_q}$. The piece-interaction tax is the Minkowski mixed area
+$V(\cdot,-\cdot)$ \cite{Schneider} already used for the ellipse (\S\ref{sec:ellipse}), now evaluated between two
+triangles.
+
+\begin{lemma}[Mixed-area constant]\label{lem:trimixed}
+For the unit triangle $T$ and its eight orientations $R_kT$ \textup{(}$k=0,\dots,7$, rotation by $k\cdot45^{\circ}$\textup{)},
+the mixed areas against $-T$ are
+\[
+\bigl(V(R_kT,-T)\bigr)_{k=0}^{7}=\Bigl(2,\ \sqrt2,\ 2,\ \tfrac3{\sqrt2},\ 1,\ \tfrac3{\sqrt2},\ 2,\ \sqrt2\Bigr),
+\qquad\text{so}\qquad \kappa_T:=\max_kV(R_kT,-T)=\tfrac3{\sqrt2}.
+\]
+The endpoints are Rogers--Shephard: $V(T,-T)=\tfrac12\operatorname{area}(T-T)=2$ (the difference body of a triangle
+has six times its area) and $V(-T,-T)=\operatorname{area}(T)=1$. The six intermediate values are finite
+rational-plus-$\sqrt2$ evaluations of polygonal Minkowski sums, checked symbolically \cite{Code}.
+\end{lemma}
+
+\begin{lemma}[Eroded-volume criterion]\label{lem:trierode}
+At prime $q$, with free area $R_{<q}$, consider placing the $q$-piece as a translate of the copy
+$K=R_j(\sqrt{d_q}\,T)$ in a fixed candidate orientation $j$. The set of invalid translations of a reference point
+of $K$ is
+\[
+\bigl(T\setminus(T\ominus K)\bigr)\ \cup\ \bigcup_{p<q}\bigl((P_p\oplus(-K))\setminus P_p\bigr),
+\]
+the container's inner boundary layer together with one dilation collar per placed piece. Central symmetry made this
+decomposition invisible for the ellipse ($-E=E$ up to translation); for the triangle the signs must be kept.
+Since $\operatorname{area}(P_p\oplus(-K))-\operatorname{area}(P_p)=2V(P_p,-K)+d_q$ and
+$V(R_{k_p}T,-R_jT)=V(R_{k_p-j}T,-T)$, a translate of $K$ can be placed once
+\begin{equation}\label{eq:tristar}
+\frac{b_j+2\sum_{p<q}\sqrt{d_p}\,V_p}{\sqrt{q\,R_{<q}}}+\frac{N_q}{q}\;<\;1,
+\qquad V_p=V(R_{k_p-j}T,-T)\le\kappa_T,
+\end{equation}
+with $k_p$ the orientation of the placed $p$-piece, $b_j$ the container boundary coefficient of orientation $j$
+($b_0=2$, $b_4\le4$, from the erosion identities above), and $N_q=\pi(q)-1$. The shape of the container enters only
+through the pair $(b_j,\{V_p\})$.
+\end{lemma}
+
+With the geometric criterion now reduced to \eqref{eq:tristar}, the remaining task is to control its orientation
+weights. Two schedules do so. \emph{Uniform:} previously placed pieces may occupy all eight
+orientations, and each new piece is placed container-aligned ($j=0$, $b_0=2$, $V_p\le\kappa_T$), so
+\eqref{eq:tristar} reads $(2+2\kappa_T\,T(q))/\sqrt{q\,R_{<q}}+N_q/q<1$ with $T(q)=\sum_{p<q}\sqrt{d_p}$.
+\emph{Disciplined:} free orientations for the finitely many pieces $p\le1000$; every later candidate is restricted
+to $j\in\{0^{\circ},180^{\circ}\}$ and chooses adaptively whichever of the two admits a placement. Averaging
+\eqref{eq:tristar} over the two candidate orientations shows one of them is always available, and replaces each
+interaction weight by
+\[
+\bar a_k:=\tfrac12\bigl(V(R_kT,-T)+V(R_{k+4}T,-T)\bigr),\qquad
+(\bar a_k)_{k=0}^{7}=\Bigl(\tfrac32,\ \tfrac5{2\sqrt2},\ 2,\ \tfrac5{2\sqrt2},\
+\tfrac32,\ \tfrac5{2\sqrt2},\ 2,\ \tfrac5{2\sqrt2}\Bigr),
+\]
+and the boundary tax by $\tfrac12(b_0+b_4)\le3$. Thus $\bar a_{k_p}=\tfrac32$ exactly for every predecessor itself
+at $0^{\circ}/180^{\circ}$, while a free-orientation predecessor may cost up to $\max_k\bar a_k=2$; the weight
+$\tfrac32$ does \emph{not} bound the free segment. Collecting the excess of the exceptional pieces into
+\[
+H\;=\;\sum_{p\le1000}\sqrt{d_p}\,\bigl(\bar a_{k_p}-\tfrac32\bigr)
+\;\le\;\tfrac12\sum_{p\le1000}\sqrt{d_p}\;=:\;\tfrac12\,C_f,\qquad C_f=5.1383\ldots,
+\]
+the disciplined criterion becomes
+\begin{equation}\label{eq:tridisc}
+\frac{3+3\,T(q)+2H}{\sqrt{q\,R_{<q}}}+\frac{N_q}{q}\;<\;1 .
+\end{equation}
+Since $H$ is a finite quantity determined by the head, the asymptotics are those of \eqref{eq:tristar}; the
+certificate uses the head-independent worst case $2H\le C_f$ throughout, so no property of the realized head enters
+the tail argument (the head actually built has $2H=2.18$; its orientation census is recorded in \cite{Code}). The
+disciplined schedule is the more economical---its alternating-mass weight is $3/2$ against $\kappa_T=3/\sqrt2$---and
+is the one we certify. One distinction of record: the averaging argument licenses the \emph{adaptive} tail schedule
+(one of the two orientations is available at each step; which one is not controlled), whereas the certified head
+happens to alternate $0^{\circ}/180^{\circ}$ strictly past $p=1000$---a property of the transcript, enforced by the
+verifier, not a consequence of the criterion.
+
+\begin{proposition}[Crossover and tail]\label{prop:tricross}
+For the disciplined schedule, with the worst case $2H\le C_f$, the criterion \eqref{eq:tridisc} holds for every
+prime $q>115363$ and fails at $q=115363$; the head is the $\pi(115363)=10906$ primes $2,\dots,115363$. On the
+finite window $(115363,\,10^7]$ this is a terminating outward-rounded interval evaluation of the exact prime
+sums: the largest post-head upper endpoint is $0.9999700506$ at $q=115399$. For all $q\ge10^7$, the explicit
+majorant of Appendix~\ref{app:tail}, applied to \eqref{eq:tridisc} with coefficient $3$ on $T(q)$ and the
+additive constant $3+C_f$, has upper value $0.6917952459$ at $10^7$ and decreases thereafter.
+These two bounds establish the entire infinite continuation. The alternative uniform-orientation schedule
+has a later numerical crossover and is not needed for this theorem.
+\end{proposition}
+
+\begin{theorem}[Certified head]\label{thm:trihead}
+The $10906$-piece disciplined head is a valid partial packing of $T$: the pieces have pairwise-disjoint interiors
+and each lies in $T$. Work in the rational-edge frame---$T$ with vertices $(-1,0),(1,0),(0,1)$, its three edges the
+rational lines $y\ge0$, $x+y\le1$, $y-x\le1$, anchors snapped to the $2^{-40}$ grid---so that every vertex
+coordinate is $(\text{rational})+\alpha\sqrt{2d_p}+\beta\sqrt{d_p}$ with $\alpha,\beta\in\Z$. Containment is then
+decided by \emph{exact rational arithmetic} wherever a contact's radical part vanishes (the intended boundary
+contacts, on the two rational legs) and by $100$-bit interval arithmetic otherwise; disjointness is decided by a
+separating-axis witness among the eight directions $k\cdot45^{\circ}$, which contain every edge normal of every
+piece, certified in the same arithmetic and fail-closed. The verifier reports all $98154$ containment margins
+nonnegative (with $11$ exact-zero leg contacts) and all $\binom{10906}{2}$ pairs disjoint ($42610$ separating-axis
+witnesses, the remainder pruned by a padded bounding box), least certified gap $3.5\times10^{-18}$. The certificate
+and its verifier are the companion code \cite{Code}.
+\end{theorem}
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.86\textwidth]{triangle_packing.png}
+\caption{The certified $10906$-piece head of Theorem~\ref{thm:trihead}: the isosceles right triangle packed by
+similar copies of areas $d_p$ for the primes $p\le115363$, the largest cells labelled by prime. Piece $2$ is
+exactly the right half---the self-similar split, the triangle's native fraction $d_2=\tfrac12$---and the free
+orientations of the exceptional segment $p\le1000$ are visible in the $45^{\circ}$ tilts among the larger pieces.
+Colour runs deep-to-light in $\log\log p$, as in Figures~\ref{fig:rect} and~\ref{fig:ellipse}.}
+\label{fig:tripack}
+\end{figure}
+
+\begin{theorem}[Perfect packing of the triangle]\label{thm:tripack}
+The isosceles right triangle of area $1$ is perfectly packed by pairwise-disjoint similar copies of itself of areas
+$d_p$, one for each prime.
+\end{theorem}
+
+\begin{proof}
+Place the primes $\le115363$ by the certified head (Theorem~\ref{thm:trihead}); at the first tail prime $q_1$ the
+free region has area $R_{<q_1}$. From $q_1$ onward run the disciplined schedule. Proposition~\ref{prop:tricross}
+gives the averaged criterion \eqref{eq:tridisc}; by its construction, at least one of the two candidate orientations
+then satisfies the underlying eroded-volume criterion \eqref{eq:tristar}, so a legal placement of the $q$-piece
+exists and is taken. No piece is ever refused, and $\sum_pd_p=1$ forces coverage up to measure zero. The head is a
+terminating exact/interval computation and the tail an explicit analytic bound (Appendix~\ref{app:tail}), so the
+theorem is unconditional and computer-assisted in exactly the sense of Theorems~\ref{thm:rect} and~\ref{thm:ellipse}.
+\end{proof}
+
+\begin{remark}[An exact algebraic base]\label{rem:tribase}
+The first $15$ primes $2,\dots,47$ admit a stricter, fully symbolic certificate: a greedy placement of $15$
+triangles of areas exactly $d_2,\dots,d_{47}$ with every coordinate in $\Q(\sqrt2,\dots,\sqrt{47})$, all $135$
+containment sign-tests and $105$ separating-edge certificates checked by exact symbolic computation \cite{Code}, the
+free region having area exactly $R_{<50}$. This anchors the interval head against exact algebraic arithmetic on its
+first pieces.
+\end{remark}
+
+The prime-level packing is now established by the same head--tail architecture as in the ellipse, but with the
+orientation averaging above replacing central symmetry. We therefore turn, as before, to the shifted state families.
+
+\subsection{Part B: the integers}
+
+As for the ellipse, similarity carries the recursive dissection of \S\ref{sec:integers} into the triangle: the cell
+of $n$ is a similar triangle of area $\tfrac1n\prod_{r<P(n)}(1-1/r)$ (Proposition~\ref{prop:cell}), and the children
+of a state-$s$ cell carry the shifted least-prime-factor family $\sigma_s(q)=d_q/R_{<s}$ of \eqref{eq:sigma}. What
+must be checked is that each cell is perfectly packed by its children.
+
+\begin{proposition}[State comparison and finite heads]\label{prop:tristates}
+Run the disciplined capacity method in a state-$s$ cell: its criterion is \eqref{eq:tridisc} with $d,R,N$
+restricted to primes $\ge s$ and the free ($p\le1000$) and alternating masses subtracted separately, each with its
+own weight ($2$ and $\tfrac32$). As in Proposition~\ref{prop:states} every subtracted state term---the container
+coefficient $3\sqrt{R_{<s}}$, the two weighted partial sums, and the count---is nonnegative and increasing in $s$,
+so $\mathrm{Crit}_s\le\mathrm{Crit}_2$ termwise: state $2$ is the hardest, and every state's criterion holds past a
+crossover $q_1^{(s)}\le115363$; each of the $45$ state criteria is in addition evaluated directly in \cite{Code},
+not inferred from monotonicity alone. Exactly the $45$ prime states $s\le197$ have a nonempty head; their
+sizes run from $10906$ (state $2$, Theorem~\ref{thm:trihead}) down to $398$ (state $197$) and total $118593$
+pieces, while every state $s\ge199$ is covered by the tail from its first piece
+($\max_q\mathrm{Crit}_{199}(q)=0.9984<1$). All $45$ heads are certified to the standard of
+Theorem~\ref{thm:trihead}, least certified gap $4.2\times10^{-18}$ over the family; the crossovers, head sizes, and
+per-state certificates with their manifest are available in the companion code \cite{Code}.
+\end{proposition}
+
+\begin{theorem}[The integers in triangular cells]\label{thm:triintegers}
+Given the $45$ certified state heads of Proposition~\ref{prop:tristates}, the isosceles right triangle admits the
+full recursive dissection of \S\ref{sec:integers}: every cell $[n]$ is perfectly packed by its children, and along
+each infinite chain the nested similar triangles shrink to a point, realizing the full integer recursion in triangular cells with no residue.
+\end{theorem}
+
+\begin{proof}
+Fix a cell of state $s$. If $s\ge199$, Proposition~\ref{prop:tristates} gives its criterion for every $q\ge s$, so
+the capacity method (as in Theorem~\ref{thm:tripack}) places all its children; if $s\le197$, place the certified
+state-$s$ head first and run the capacity method past that state's crossover. Either way the children are disjoint
+and fill the cell up to measure zero. The states are countable and each is handled once, so the whole tree is
+packed. As in Theorem~\ref{thm:ellintegers}, the shrinking down every chain is uniform: each descent step
+multiplies the cell area by $\sigma_s(q)\le1/q\le\tfrac12$, so a depth-$m$ cell has area at most $2^{-m}$ and
+diameter $O(2^{-m/2})$, and every infinite chain converges to a point.
+\end{proof}
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.86\textwidth]{triangle_recursion.png}
+\caption{The integers in the triangle (Theorem~\ref{thm:triintegers}): the recursive least-prime-factor dissection rendered in triangular cells. Three
+depths are shown---primes $p$ at level $1$; then $pq$ inside $[2],[3],[5],[7]$; then three-factor cells---each cell
+labelled by its integer and coloured by depth. Level $1$ is the certified head of Theorem~\ref{thm:trihead}, and
+cell $[2]$---the container's right half---is subdivided by the same certified head carried in by the exact
+similarity of Proposition~\ref{prop:markov}, so its sub-pattern is the whole figure in miniature; the
+sub-dissections drawn inside the state-$3$, $5$, and $7$ cells are illustrative greedy packings of the exact state
+areas $\sigma_s(q)$, standing in for the certified state heads of Proposition~\ref{prop:tristates} that play this
+role in the proof. The identical sub-patterns of $[5]$ and $[15]$ are the Markov similarity in simplicial cells.}
+\label{fig:trirecursion}
+\end{figure}
+
+The triangle completes the three proved realizations and joins the ellipse as a \emph{non-tiling} solution. Because
+similar triangles corner-anchored at $45^{\circ}$ do not tile the free region, the recursive construction requires a
+family of per-state certified heads---$45$ here, ten required for the ellipse (Proposition~\ref{prop:states})---whereas the
+rectangle's exact guillotine tiling serves every state with a single construction (\S\ref{sec:rect}). More
+importantly, the same eroded-volume method has now closed both a smooth centrally symmetric body and a polygonal
+non-centrally-symmetric one. The common mechanism is therefore the capacity estimate itself, with the geometry
+entering through explicit boundary and mixed-area constants. The
+next sections study geometric properties of the resulting dissections.
+
+\section{The staircase limit angle}\label{sec:angle}
+
+The packing results above establish existence by model-specific constructions. The rectangle also admits a particularly transparent exact staircase dissection whose asymptotic direction can be computed independently of the packing machinery. In that staircase dissection, index the primes by $j$ and let $A=\{p_1,p_3,p_5,\dots\}=\{2,5,11,17,\dots\}$ receive the
+vertical cuts and $B=\{p_2,p_4,\dots\}=\{3,7,13,\dots\}$ the horizontal ones. After $n$ steps the remainder
+rectangle has dimensions
+\[
+w_n=\prod_{\substack{j\le n\\ j\ \mathrm{odd}}}\Bigl(1-\frac1{p_j}\Bigr),\qquad
+h_n=\prod_{\substack{j\le n\\ j\ \mathrm{even}}}\Bigl(1-\frac1{p_j}\Bigr),
+\]
+and the staircase vertices $v_n=(1-w_n,\,1-h_n)$ converge to the corner $(1,1)$ at distance
+$\asymp1/\sqrt{\ln p_n}$ by \eqref{eq:mertens} (Figure~\ref{fig:angle}).
+
+\begin{theorem}[Limit angle]\label{thm:angle}
+The direction of approach converges: with $a_j=\ln\bigl(1-1/p_j\bigr)^{-1}$,
+\[
+\frac{h_n}{w_n}\;\longrightarrow\;\kappa=e^{L},\qquad
+L=\sum_{j\ge1}(-1)^{j+1}a_j ,
+\]
+so $v_n$ approaches $(1,1)$ along a ray at angle $\theta^*=\arctan\kappa$ above the horizontal. Moreover
+$|L-L_n|\le a_{n+1}\le 2/p_{n+1}$.
+\end{theorem}
+
+\begin{proof}
+Write $S_A=\sum_{p\in A}1/p$, $S_B=\sum_{p\in B}1/p$. Then $S_A+S_B=\sum_p 1/p=\infty$, while
+$S_A-S_B=\sum_j(-1)^{j+1}/p_j$ converges by the alternating-series (Leibniz) test, since $1/p_j$ decreases
+strictly to $0$ (no prime-gap bound is needed). From a divergent sum and a convergent difference, both
+$S_A=\tfrac12((S_A{+}S_B)+(S_A{-}S_B))$ and $S_B$ diverge; therefore $w_n,h_n\to0$ and the limit point is the
+corner. Next $\ln(h_n/w_n)=\sum_{j\le n}(-1)^{j+1}a_j$ is the partial sum of an alternating series whose terms
+$a_j=\ln(1-1/p_j)^{-1}$ decrease strictly to $0$, hence converges by the same test, with
+$|L-L_n|\le a_{n+1}\le 2/p_{n+1}$.
+\end{proof}
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.98\textwidth]{staircase_angle.png}
+\caption{Left: the staircase vertices and the limiting ray of Theorem~\ref{thm:angle}. Right: convergence of the
+aspect ratio $h_n/w_n$ to $\kappa=e^{L}$.}
+\label{fig:angle}
+\end{figure}
+
+The alternating-series estimate also gives a direct numerical enclosure. With all primes to $10^{8}$
+($n=\pi(10^8)=5\,761\,455$ terms), consecutive partial sums give
+$L_{n-1}=0.4047892129\ldots<L<L_n=0.4047892229\ldots$, hence
+\begin{equation}\label{eq:Lenclosure}
+L\;\in\;[0.40478921,\;0.40478923].
+\end{equation}
+Thus the limiting aspect ratio and angle are determined, for example, as
+\begin{equation}\label{eq:constants}
+\kappa=e^L=1.4989865\ldots,\qquad \theta^*=56.29205\ldots^{\circ},
+\end{equation}
+with the displayed precision read against \eqref{eq:Lenclosure}. The theorem therefore separates two scales of
+convergence: the staircase vertex approaches the corner at the Mertens rate $1/\sqrt{\ln p_n}$, whereas its
+direction is controlled by the alternating-series remainder $O(1/p_n)$.
+
+\section{Geometry and point-set structure of the recursive realizations}\label{sec:realizations}
+
+The packing theorems establish existence; we can now study features of the realized recursion itself. Figure~\ref{fig:recursions} shows the first three depths in the rectangle and ellipse, while Figure~\ref{fig:trirecursion} gives the triangular counterpart. The repeated sub-patterns inside the state-$5$ cells $[5]$ and $[15]$ give a geometric instance of Proposition~\ref{prop:markov}.
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.49\textwidth]{rect_recursion.png}\hfill
+\includegraphics[width=0.49\textwidth]{ellipse_recursion.png}
+\caption{The integers in two of the three proved models (the triangle counterpart is
+Figure~\ref{fig:trirecursion}): the recursive least-prime-factor dissection carried
+into the $\sqrt2$ rectangle (left, \S\ref{sec:rect}) and the aspect-$0.63$ ellipse (right, \S\ref{sec:ellipse}).
+Three depths are shown---primes $p$ at level $1$; then $pq$ inside $[2],[3],[5],[7]$; then three-factor cells---each
+cell labelled by its integer and coloured by depth. Cell area is $\operatorname{area}[n]=R_{<P(n)}/n$
+(Proposition~\ref{prop:cell}), ordered by \emph{largest prime factor}, not by $n$: powers of two are the largest
+composite cells and primes the most discounted, so $[16]$ (area $\tfrac1{16}$) exceeds $[7]$ (area $\tfrac4{105}$).}
+\label{fig:recursions}
+\end{figure}
+
+The recursive state structure may also be viewed as a countable-state graph-directed iterated function system in the sense of
+Mauldin--Urba\'nski \cite{MU}: states are primes, edges $p\to q$ exist for $q\ge p$, and the contraction ratio is
+$\bigl((1/q)\prod_{p\le r<q}(1-1/r)\bigr)^{1/2}$. This formalism is not needed for the packing proofs, but it gives a convenient language for the equivariant point-set gauges introduced below.
+
+\subsection{The skeleton: infinite ink, dimension one, dense closure}
+
+Here the \emph{skeleton} of the dissection means the union of all its cut-boundaries---not the medial axis of
+shape analysis.
+
+\begin{proposition}\label{prop:ink}
+In the triangular realization, the total edge length of the dissection is infinite already at a single level of the recursion: the level-one perimeters are $(2+2\sqrt2)\sqrt{d_p}$ and $\sum_p\sqrt{d_p}\asymp\sum_p(p\ln p)^{-1/2}=\infty$, with partial sums
+$\asymp\sqrt{P}/(\ln P)^{3/2}$. The ink required to reduce the uncovered area to $\varepsilon$ is
+\[
+\mathcal{L}(\varepsilon)\;\asymp\;\varepsilon^{3/2}\exp\Bigl(\frac{e^{-\gamma}}{2\varepsilon}\Bigr),
+\]
+and by tail-completeness the same divergence holds inside every cell: every neighbourhood is infinitely inked.
+Nevertheless the skeleton is a countable union of segments, hence of Hausdorff dimension $1$ and measure zero;
+after full recursion cell diameters vanish along every infinite chain, so the triangular skeleton is dense in the triangle.
+\end{proposition}
+
+\begin{proof}
+A level-one piece of area $d_p$ is similar to the unit-area container (legs $\sqrt2$, hypotenuse $2$, perimeter
+$2+2\sqrt2$), whence perimeter $(2+2\sqrt2)\sqrt{d_p}$. By Mertens, $\sqrt{d_p}=\sqrt{R_{<p}/p}\asymp(p\ln
+p)^{-1/2}$, and partial summation against $\pi(t)\sim t/\ln t$ (as in Appendix~\ref{app:tail}, Step~3) gives
+$\sum_{p\le P}\sqrt{d_p}\asymp\sqrt P\,(\ln P)^{-3/2}\to\infty$. For the ink function, the uncovered area after
+the primes $\le P$ is $R(P)=e^{-\gamma}\bigl(1+O(1/\ln P)\bigr)/\ln P$ by Mertens' third theorem, so
+$R(P)=\varepsilon$ forces $\ln P=e^{-\gamma}\varepsilon^{-1}\bigl(1+O(\varepsilon)\bigr)$; substituting into the
+partial sums,
+\[
+\mathcal L(\varepsilon)\;\asymp\;\sqrt P\,(\ln P)^{-3/2}
+=\exp\Bigl(\frac{e^{-\gamma}}{2\varepsilon}+O(1)\Bigr)\Bigl(\frac{e^{-\gamma}}{\varepsilon}\Bigr)^{-3/2}
+\;\asymp\;\varepsilon^{3/2}\exp\Bigl(\frac{e^{-\gamma}}{2\varepsilon}\Bigr),
+\]
+the $O(\varepsilon)$ in the exponent contributing only the bounded factor $e^{O(1)}$. Inside a cell of state $s$
+the children carry the shifted areas $\sigma_s(q)=\tfrac1q\prod_{s\le t<q}(1-1/t)=d_q/R_{<s}$, and
+$\sum_{q\ge s}\sqrt{\sigma_s(q)}\asymp R_{<s}^{-1/2}\sum_{q\ge s}(q\ln q)^{-1/2}=\infty$ by the same estimate.
+Thus every cell contains infinite total edge length; since cell diameters vanish along every infinite chain
+(Theorems~\ref{thm:ellintegers},~\ref{thm:triintegers}), the same is true in every neighbourhood. Finally the skeleton is a countable union of straight segments, hence has Hausdorff dimension $1$ and Lebesgue measure zero, and it is dense because the diameters of nested cells tend to zero.
+\end{proof}
+
+The divergence is specific to the LPF area sequence rather than to perfect infinite dissections in general. It also illustrates why the geometric information in the construction is carried by measure rather than cardinality: every state has the same countably branching descendant structure, while the cell masses distinguish the states quantitatively.
+
+\subsection{Gauge freedom: where do the integers live?}\label{sec:gauge}
+
+The canonical content of the construction is a measure isomorphism between $(T,\text{Lebesgue})$ and the space of
+infinite nondecreasing prime chains with its density measure. Measure isomorphisms are defined only up to null
+sets, and individual integers are null: almost every \emph{point} of $T$ corresponds to an \emph{infinite} chain,
+while finite words (the integers) correspond to cells---regions, never points. Any pointwise location of $n$ is
+therefore a convention. The centroid of $[n]$ is a poor convention: generically it lies interior to some
+descendant cell and is thus already owned by an infinite chain extending $n$'s word. The only unclaimed real
+estate is the skeleton, the measure-zero set where cell addresses collide: integers naturally live on the seams.
+
+A pointwise convention can be made compatible with the recursion. If each cell is packed so that its residual tail accumulates at a distinguished vertex, define $x_n$ to be that vertex of $[n]$. Then
+\[
+x_{nq}\;\longrightarrow\;x_n\qquad(q\to\infty\ \text{through primes }q\ge P(n)).
+\]
+Injectivity of $n\mapsto x_n$ is an additional design constraint and is not automatic. A stronger choice is an \emph{equivariant gauge}: if $\varphi^{(n)}_q$ is the similarity carrying the container onto $[nq]$, require
+$x_{nq}=\varphi^{(n)}_q(x_n)$. Then multiplication is represented by the same contracting similarities that generate the recursive cells, placing the point set $\{x_n\}$ within the graph-directed framework above.
+
+The same gauge choices can be imposed in each of the three established recursive realizations. For the rectangle, there is also a useful two-sheet extension: two independently packed $\sqrt2$ rectangles may be glued along their long edges, reversing the initial piece-$2$ split. One may then represent a reduced fraction $m/n$ by the chord joining $x_m$ on one sheet to $x_n$ on the other; reflection across the seam realizes reciprocation. This construction is explored further in forthcoming work.
+
+This distinction also separates two kinds of geometric statement. Properties of the cells themselves---their masses, nesting, state structure, and the dimension and measure statements proved above---are gauge-invariant. By contrast, properties of the selected points $\{x_n\}$, such as injectivity, angular distribution, adjacency, or the location of accumulation points, depend on the chosen gauge and should be treated as constrained design properties rather than consequences of the packing theorems.
+
+\section{Open problems}\label{sec:open}
+
+\begin{enumerate}
+\item \textbf{Beurling systems and anisotropic continuation.} For an increasing generalized-prime sequence $p_1<p_2<\cdots$ with $\sum_n1/p_n=\infty$, the weights $d_n=p_n^{-1}\prod_{j<n}(1-p_j^{-1})$ sum to one. Determine explicit conditions on such sequences guaranteeing a finite admissible head and an arrangement-independent continuation, and identify convex-geometric analogues under quantitative mixed-area or anisotropy assumptions. The classical primes provide one instance; the Meir--Moser/Basel-type endpoint is a distinct and potentially more rigid regime. Normalization alone does not imply geometric packability.
+\item \textbf{Head-free proofs (all three models).} Each packing theorem still rests on a finite certified head:
+the capacity and guillotine criteria fail on an initial range of primes, which is settled by computation rather
+than analytically. Remove the head in any model---prove the placeability criterion from the first piece under some
+schedule, or show a stationary shape law for the rescaled free region that forces it---turning the computer-assisted
+theorems into head-free ones. For the triangle a distinct, purely geometric route is also open, though not needed
+for the theorem: prove the fatness invariant $\mathrm{inradius}(F_q)\ge c\sqrt{R_{<q}}$ for a fixed $c>0$ (observed
+$\approx0.40$), which gives placeability directly---the inscribed disk of a free region of inradius
+$\ge a_q=\sqrt{R_{<q}/q}$ holds a similar copy of $T$ of that altitude---without the mixed-area accounting.
+\item \textbf{Ellipse anisotropy and convex extensions.} The sharp rectangular interval is settled by Theorem~\ref{thm:rect}. For similar ellipses, determine the feasible aspect-ratio range, replacing the fixed certified example by interval-certified heads and a uniform mixed-area continuation estimate. More generally, seek sufficient convexity and anisotropy conditions for self-similar perfect packings of prescribed area sequences. The disk remains excluded by Proposition~\ref{prop:iso}.
+\item \textbf{The ellipse residual.} The similar-ellipse packing (Theorem~\ref{thm:ellipse}) leaves a residual of
+a different character from the rectangle's polygonal packing skeleton. The residual contains $\partial\Omega$,
+so its Hausdorff dimension is at least $1$; no upper bound below $2$ follows from perfect packing alone, and the
+tail theorem permits arbitrary legal choices at every step, so the dimension is a property of the packing, not of
+$r$ alone. Determine the attainable spectrum
+$D_{\min}(r)=\inf_{\mathcal P}\dim_H E(\mathcal P)\le D_{\max}(r)=\sup_{\mathcal P}\dim_H E(\mathcal P)$ over
+admissible packings $\mathcal P$.
+\item \textbf{Perfect chain packings.} Does a perfect packing exist in which the piece of each prime touches the
+piece of the preceding prime? Any neighbourhood of a corner tip is coverable only by arbitrarily small, hence
+arbitrarily late, pieces, so a perfect chain must revisit every corner on an infinite schedule; no obstruction is known.
+\item \textbf{The constant $L$} of Theorem~\ref{thm:angle}: closed form or irrationality; more generally the
+arithmetic of index-parity prime sums. Also: fluctuations of $\ln(h_n/w_n)-L$, i.e.\ the interleaved-class
+imbalance $\sum_{A,\,q\le x}1/q-\sum_{B,\,q\le x}1/q$.
+\item \textbf{Linear independence of $\{\sqrt{d_q}\}$ over $\Q$} (the pairwise ratios are square roots of
+explicit rationals); consequences: no accidental collinearities among vertices of distinct scales in algebraic
+designs.
+\item \textbf{The point set $\{x_n\}$} under the equivariant gauge. Determine the closure $\overline{\{x_n\}}$
+and its Hausdorff dimension via the pressure of the associated conformal graph-directed Markov system (states the
+primes, edge $p\to q$ for $q\ge p$ with contraction $(1/q)\prod_{p\le r<q}(1-1/r)^{1/2}$, pressure vanishing at
+$s=2$); in particular relate its finiteness parameter $\theta$---the abscissa of convergence of the pressure---to
+the Mertens-rate scaling $s_n\asymp(\sqrt n\,\ln n)^{-1}$ of the pieces and to the critical exponent $t=\tfrac12$.
+Also: the skeleton's box dimension, and angular equidistribution for the spiral design via $\sqrt p\bmod1$.
+\item \textbf{The chain word.} A chain packing induces one letter per prime (which $45^{\circ}$ family, which
+side, at the contact edge): the statistics of this four-letter word as an arithmetic object.
+\end{enumerate}
+
+\subsection*{Methods note}
+Packings, decompositions and audits were computed in Python by floating-point geometric construction
+(\texttt{shapely}/GEOS), followed by exact symbolic or interval verification where stated;
+prime sums used sieves to $10^{8}$ with Euler acceleration. The triangle's exact algebraic base
+(Remark~\ref{rem:tribase}) was verified in \texttt{sympy} over $\Q(\sqrt2,\dots,\sqrt{47})$: exact areas,
+$135$ containment sign-tests, and $105$ pairwise separating-edge certificates, all passing. The triangle
+prime head ($10906$ pieces) and the family of $45$ per-state heads were built by floating-point greedy placement
+and then certified independently, in the rational-edge frame, by exact-rational and $100$-bit interval arithmetic:
+containment by per-vertex edge margins, disjointness by separating-axis witnesses, fail-closed, with least
+certified gap $4.2\times10^{-18}$ over the family and every intended boundary contact an exact zero; the crossovers,
+head sizes, per-state certificates, and their manifest are reproduced by the companion code \cite{Code}. ``Verified''
+elsewhere means: union area equals summed area, maximal pairwise intersection $\le3\times10^{-18}$, containment
+checked, and area ledgers conserved to $\le5\times10^{-14}$.
+
+\backmatter
+
+\bmhead{Acknowledgements}
+\emph{Use of AI tools.} AI large language models were used to explore tail proof strategies; to draft code (at the
+author's direction) for empirical enumerations, placement of initial pieces, and generation of graphics; to help identify adjacent scholarship; to check LaTeX
+formatting; and to provide feedback on various drafts. The author accepts full responsibility for the contents of
+this article.
+
+\section*{Declarations}
+\begin{itemize}
+\item \textbf{Funding.} No funding was received to assist with the preparation of this manuscript.
+\item \textbf{Competing interests.} The author has no competing interests to declare.
+\item \textbf{Data and availability.} The exact algebraic base verification and the packing
+computations of \S\ref{sec:packing}, \S\ref{sec:rect}, and \S\ref{sec:ellipse} are generated by direct computation as described in the
+text; no external datasets were used. The sharp rectangle classification is supported by the sixteen-schedule
+interval certificate \texttt{rectangle\_full\_interval\_certificate.json}, the eight certified shifted-square
+heads, and the accompanying reproducible interval verifiers, including the finite continuation window through
+$10^7$. The ellipse container head (\texttt{ellipse\_head\_n1650.json}) and nine shifted-state heads
+(\texttt{head\_s3.json}--\texttt{head\_s29.json}) provide the finite input for the elliptical recursion;
+the valid state-$31$ head is also archived although the revised criterion is already head-free there.
+These ellipse files record dyadic centres and $0/90^\circ$ orientations; the verifier reconstructs exact
+rational area shares $\sigma_s(q)$ and certifies pairwise disjointness using rational Perram--Wertheim witnesses
+and containment using interval arithmetic. The forty-five certified triangle heads of
+Theorem~\ref{thm:trihead} and Proposition~\ref{prop:tristates}---from the $10906$-piece state-$2$ head through
+the $398$-piece state-$197$ head---are supplied with their manifest and checked by exact-rational and interval
+containment tests and fail-closed separating-axis witnesses. The sieve, enumeration, construction and verification
+code, all head certificates, and the finite-window evaluations are available in the companion repository
+\url{https://github.com/peteruphamconsulting-stack/Three-Bonsai2}~\cite{Code}.
+\end{itemize}
+
+\begin{appendices}
+
+\section{Explicit prime-sum bounds for the packing criteria}\label{app:tail}
+
+For the prime-sum quantity used in the rectangle continuation and in the convex-body tails, the earlier explicit estimates give, for every prime $q\ge X_1=10^{7}$,
+\begin{equation}\label{eq:tailgoal}
+\rho(q)\;=\;\frac{3T(q)+r}{\sqrt{q\,R_{<q}}}\;<\;0.614,\qquad r=\sqrt2 .
+\end{equation}
+The two inputs are the explicit Mertens bounds of Rosser--Schoenfeld and the explicit Chebyshev bound of
+Dusart. Write $\gamma$ for the Euler--Mascheroni constant, $e^{-\gamma}=0.561459\ldots$, and
+$M(x)=\prod_{p\le x}(1-1/p)$.
+
+\medskip
+\noindent\textbf{Inputs.}
+\begin{align}
+\text{(RS)}\quad& \frac{e^{-\gamma}}{\ln x}\Bigl(1-\tfrac1{\ln^2x}\Bigr)\;\le\;M(x)\;\le\;
+      \frac{e^{-\gamma}}{\ln x}\Bigl(1+\tfrac1{\ln^2x}\Bigr) &&(x\ge285),\\[2pt]
+\text{(Du)}\quad& \pi(x)\;\le\;\frac{x}{\ln x}\Bigl(1+\frac{1.2762}{\ln x}\Bigr) &&(x\ge Q_1).
+\end{align}
+(RS) is Rosser--Schoenfeld \cite{RosserSchoenfeld}, and (Du) is Dusart \cite{Dusart}. Set $Q_1=10^{5}$,
+$\ell:=\ln Q_1=11.5129\ldots$, and $\beta:=e^{-\gamma}\bigl(1-\ell^{-2}\bigr)=0.55722\ldots$
+
+\medskip
+\noindent\textbf{Step 1 (lower bound on $R_{<q}$).}
+For prime $q$, $R_{<q}=\prod_{p<q}(1-1/p)=M(q)\,\frac{q}{q-1}\ge M(q)$, so by (RS), for $q\ge Q_1$,
+\begin{equation}\label{eq:Rlow}
+R_{<q}\;\ge\;\frac{e^{-\gamma}}{\ln q}\Bigl(1-\tfrac1{\ln^2q}\Bigr)\;\ge\;\frac{\beta}{\ln q}.
+\end{equation}
+
+\noindent\textbf{Step 2 (pointwise bound on $\sqrt{d_p}$).}
+Again $R_{<p}=M(p)\,\frac{p}{p-1}$, so by the upper half of (RS), for $p\ge Q_1$,
+\[
+\sqrt{d_p}=\sqrt{\frac{R_{<p}}{p}}
+   \le\frac{e^{-\gamma/2}}{\sqrt{p\ln p}}\sqrt{\Bigl(1+\tfrac1{\ln^2p}\Bigr)\tfrac{p}{p-1}}
+   \le\frac{1.004\,e^{-\gamma/2}}{\sqrt{p\ln p}},
+\]
+the last step since the product is dominated by the Mertens factor:
+$\bigl(1+\ell^{-2}\bigr)\tfrac{Q_1}{Q_1-1}=1.00755\cdot1.00001\le1.004^2$ (the large factor is
+$1+1/\ln^2 Q_1$, not the negligible $Q_1/(Q_1-1)=1.00001$).
+
+\noindent\textbf{Step 3 (partial summation).}
+Let $h(t)=(t\ln t)^{-1/2}$, so $|h'(t)|=\tfrac12 t^{-3/2}(\ln t)^{-1/2}(1+1/\ln t)$, and
+$U(q):=\sum_{Q_1<p\le q}h(p)$. By Abel summation and (Du),
+\[
+U(q)\le h(q)\pi(q)+\int_{Q_1}^{q}\pi(t)\,|h'(t)|\,dt
+     \le \sqrt q\,(\ln q)^{-3/2}\Bigl(1+\tfrac{1.2762}{\ln q}\Bigr)
+        +\tfrac12 F\!\int_{Q_1}^{q}\! t^{-1/2}(\ln t)^{-3/2}\,dt,
+\]
+where $F:=\bigl(1+\tfrac{1.2762}{\ell}\bigr)\bigl(1+\tfrac1{\ell}\bigr)=1.2073$ bounds
+$(1+\tfrac{1.2762}{\ln t})(1+\tfrac1{\ln t})$ for $t\ge Q_1$. For the integral, from
+$\frac{d}{dt}\bigl[2t^{1/2}(\ln t)^{-3/2}\bigr]=t^{-1/2}(\ln t)^{-3/2}\bigl(1-\tfrac3{\ln t}\bigr)$
+and $(\ln t)^{-5/2}\le\ell^{-1}(\ln t)^{-3/2}$ one gets, with $G:=(1-3/\ell)^{-1}=1.3524$,
+\begin{equation}\label{eq:intbd}
+\int_{Q_1}^{q} t^{-1/2}(\ln t)^{-3/2}\,dt\;\le\;2G\,\sqrt q\,(\ln q)^{-3/2}.
+\end{equation}
+Hence $U(q)\le\bigl(1+\tfrac{1.2762}{\ell}+FG\bigr)\sqrt q\,(\ln q)^{-3/2}=2.7436\,\sqrt q\,(\ln q)^{-3/2}$, and with
+Step 2,
+\[
+\sum_{Q_1<p\le q}\sqrt{d_p}\;\le\;1.004\,e^{-\gamma/2}\,U(q)\;\le\;K\,\sqrt q\,(\ln q)^{-3/2},
+\qquad K:=1.004\,e^{-\gamma/2}\cdot2.7436=2.0641 .
+\]
+Therefore, writing $A(q):=T(q)(\ln q)^{3/2}/\sqrt q$,
+\begin{equation}\label{eq:Abd}
+A(q)\;\le\;T(Q_1)\,\frac{(\ln q)^{3/2}}{\sqrt q}\;+\;K
+\qquad(q\ge Q_1),\qquad T(Q_1)=18.906 .
+\end{equation}
+The right side of \eqref{eq:Abd} is decreasing for $q\ge e^{3}$, so evaluating at $X_1=10^{7}$ gives
+$A(q)\le A(X_1)\le2.4509$ for all $q\ge X_1$.
+
+\noindent\textbf{Step 4 (assembly).} Using $T(q)=A(q)\sqrt q\,(\ln q)^{-3/2}$ and \eqref{eq:Rlow},
+\[
+\rho(q)=\frac{3T(q)+r}{\sqrt{q\,R_{<q}}}
+   \le\frac{3A(q)}{\sqrt\beta\,\ln q}+\frac{r\sqrt{\ln q}}{\sqrt\beta\,\sqrt q}
+   \qquad(q\ge Q_1).
+\]
+Both terms decrease for $q\ge X_1$; at $q=X_1$ they are $0.61112$ and $0.00241$, summing to $0.61353$, so
+$\rho(q)<0.614$ for all $q\ge X_1$, which is \eqref{eq:tailgoal}. Combined with the interval evaluations on the finite ranges, this yields the explicit auxiliary majorants used in the rectangle continuation proof. \qed
+
+\medskip
+\noindent\textbf{Two further bounds for the rectangle continuation.}
+For primes $q\ge X_1=10^7$, the lower Mertens estimate \eqref{eq:Rlow} and Dusart's bound give
+\[
+\frac1{\sqrt{qR_{<q}}}\le
+\sqrt{\frac{\ln q}{\beta q}}
+\le\sqrt{\frac{\ln X_1}{\beta X_1}}<0.00171,
+\qquad
+\frac{N_q}{q}\le\frac{\pi(q)}q
+\le\frac{1+1.2762/\ln X_1}{\ln X_1}<0.0670.
+\]
+Both displayed majorants decrease for $q\ge X_1$. Together with \eqref{eq:tailgoal} they give the
+infinite-range rectangle criterion bound stated in Theorem~\ref{thm:rect}; its finite predecessor window
+is checked separately through $10^7$ by the rectangle interval verifier.
+
+\medskip
+\noindent All constants above are reproduced by the companion code \cite{Code} (\texttt{python rect\_exact.py
+tail}), which also verifies the two finite windows in interval arithmetic and confirms that the explicit
+majorant \eqref{eq:Abd} dominates the true $A(q)$ throughout $[Q_1,X_1]$.
+
+\end{appendices}
+
+\bibliography{sn-bibliography}
+
+\end{document}

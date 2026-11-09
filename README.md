@@ -24,13 +24,17 @@ perfect-packing results and generates its figures and empirical data:
   head's first pieces.
 * **Staircase (§3).** The staircase limit-angle constant L and θ\* = arctan(e^L) ≈ 56.29°.
 
-### Revised certification (November 8–9, 2026)
+### Revised certification (November 9, 2026)
 
 The rectangular proof now uses `rectangle_full_interval_certificate.py` instead of the
 earlier reserve/immature-stock argument. Running the driver reproduced a **CERTIFIED** complete interval:
 16 schedules, both exact algebraic endpoint contacts (2,563 strict remaining inequalities per endpoint),
-maximum finite-tail upper value `0.9998320673924572` at prime `10487`, infinite majorant
-`0.7616246752362302`, and the aligned-square state comparison for every prime state *s* ≥ 3.
+and **663,297 post-head primes through `10^7`** checked in outward-rounded interval arithmetic.
+The maximum finite-tail upper value is `0.9998320673924572` at prime `10487`;
+the newly extended interval above prime `50021` has maximum `0.7574349143446191` at `50053`.
+The infinite majorant is `0.47971288278110846`, using the Appendix-A bound `rho < 0.614`,
+the Mertens lower bound, and Dusart's prime-count estimate. The aligned-square state
+comparison passes for every prime state *s* ≥ 3.
 It writes `rectangle_full_interval_certificate.json`.
 
 The previous ellipse mixed-area coefficient `(rho + 1/rho)/2` was incorrect for
@@ -70,7 +74,7 @@ state 31 head-free; the older state-31 JSON remains valid but is no longer neede
 
 | File | Role |
 |------|------|
-| `rectangle_full_interval_certificate.py` | **Current main theorem driver:** certifies 16 parameter-interval schedules, both exact aspect-ratio endpoints, the mixed-orientation uniform tail, and every shifted square state; creates the summary JSON. |
+| `rectangle_full_interval_certificate.py` | **Current main theorem driver:** certifies 16 parameter-interval schedules, both exact aspect-ratio endpoints, the mixed-orientation criterion at every post-head prime through `10^7`, the explicit infinite tail, and every shifted square state; creates the summary JSON. |
 | `rectangle_aspect_path_range.py` | Reconstructs fixed guillotine schedules and certifies all fit inequalities across intervals in *r*, including exact endpoint contacts. |
 | `rectangle_aspect_sweep.py` | Prime enumeration and deterministic finite-head scheduling support. |
 | `rectangle_aspect_recursive_certificate.py` | Verifies the aligned-square state heads and head-free state comparison, invoked by the main driver. |
@@ -175,6 +179,9 @@ Saved rectangle_full_interval_certificate.json
 ```
 
 The generated JSON, the five scripts, and their exact version information belong in the archive.
+The updated finite-window certificate proves the rectangle continuation on `(10477, 10^7]`;
+the analytic majorant applies only for `q ≥ 10^7`. The proof also uses the main
+rectangle construction for recursive state-2 cells and aligned-square packings for states `s ≥ 3`.
 For historical comparison, the earlier √2-only proof may still be reproduced with
 `python3 rect_exact.py head --q0 50000 --prec 200 --dump head_certificate_sqrt2.json`
 and `python3 rect_exact.py tail`. Those legacy commands are **not prerequisites** for the sharp theorem.
